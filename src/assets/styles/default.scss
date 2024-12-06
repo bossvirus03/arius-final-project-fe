@@ -1,0 +1,56 @@
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+  font-size: 16px;
+}
+
+img {
+  max-width: 100%;
+}
+
+#root {
+  height: 100vh;
+  overflow: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+// ::-webkit-scrollbar-thumb {
+//   background-color: #6d7e7a;
+//   border-radius: 15px;
+// }
+
+.before-none {
+  &::before {
+    display: none;
+  }
+}
+
+form div.ant-form-item-explain .ant-form-item-explain-error:not(:first-child) {
+  display: none;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-weight: 500;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+label {
+  display: block;
+}
