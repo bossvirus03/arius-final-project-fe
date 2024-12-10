@@ -10,6 +10,7 @@ import {
   DatePicker,
 } from "antd";
 import useCreateUser from "../hooks/user/useCreateUser";
+import { AxiosError } from "axios";
 
 const { Option } = Select;
 
@@ -38,8 +39,8 @@ function UserCreateModal({
             form.resetFields();
             message.info("Create user successfully!");
           },
-          onError: (err) => {
-            console.error("Failed to create user:", err);
+          onError: (err: any) => {
+            message.error(err.response.data.message);
           },
         }
       );

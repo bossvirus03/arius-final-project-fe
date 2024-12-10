@@ -58,33 +58,10 @@ api.interceptors.response.use(
             return axios(originalRequest);
           }
         } catch (refreshError) {
-          try {
-            const retryResponse = await axios.post(
-              `${ApiUrls.apiBaseUrl}/auth/refresh`,
-              {
-                token: refreshToken,
-              }
-            );
-
-            if (
-              retryResponse.status === 200 &&
-              retryResponse.data?.data?.access_token
-            ) {
-              const { access_token, refresh_token } = retryResponse.data.data;
-              setToken(access_token);
-              setRefreshToken(refresh_token);
-
-              originalRequest.headers["Authorization"] =
-                "Bearer " + access_token;
-
-              return axios(originalRequest);
-            }
-          } catch (retryError) {
-            removeToken();
-            removeRefreshToken();
-            window.location.href = "/login";
-            return Promise.reject(retryError);
-          }
+          removeToken();
+          removeRefreshToken();
+          window.location.href = "/login";
+          return Promise.reject(refreshError);
         }
       } else {
         window.location.href = "/login";

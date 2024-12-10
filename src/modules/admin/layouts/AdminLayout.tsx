@@ -22,7 +22,7 @@ const { Header, Content, Footer, Sider } = Layout;
 
 type MenuItem = Required<MenuProps>["items"][number];
 
-function Admin() {
+function AdminLayout() {
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -135,4 +135,4 @@ function Admin() {
   );
 }
 
-export default Admin;
+export default AdminLayout;

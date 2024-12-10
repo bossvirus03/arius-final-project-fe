@@ -67,10 +67,13 @@ export const onGetUsers = async (sortField: string, sortOrder: string) => {
 // PRODUCT
 export const onGetProducts = async (
   sortField: string,
-  sortOrder: string
-): Promise<ProductResponse[]> => {
+  sortOrder: string,
+  page: number,
+  size: number
+): Promise<ProductResponse> => {
   const data = await api.get(
-    ApiUrls.admin.product.getAll + `?sort=${sortField},${sortOrder}`
+    ApiUrls.admin.product.getAll +
+      `?sort=${sortField},${sortOrder}&size=${size}&page=${page}`
   );
   return data?.data.data;
 };

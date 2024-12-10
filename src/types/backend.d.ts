@@ -54,7 +54,7 @@ export interface UpdateTagRequest {
   description?: string;
 }
 
-export interface ProductResponse {
+export interface ProductRecord {
   id: string;
   name: string;
   price: number;
@@ -67,6 +67,18 @@ export interface ProductResponse {
   tags: string[];
 }
 
+export interface MetaPagination {
+  current: number;
+  pageSize: number;
+  pages: number;
+  total: number;
+}
+
+export interface ProductResponse {
+  meta: MetaPagination;
+  result: ProductRecord[];
+}
+
 export interface UserResponse {
   id: string;
   username: string;
@@ -77,8 +89,8 @@ export interface UserResponse {
   dob: Date;
   phone: string;
   active: boolean;
-  avatar: any;
-  roles: any[];
+  avatar: String;
+  roles: RoleResponse[];
 }
 
 export interface IBackendResponse<T> {
@@ -93,4 +105,10 @@ export interface ILoginResponse {
     access_token: string;
     refresh_token: string;
   };
+}
+
+export interface CartInfoResponse {
+  itemCount: number;
+  totalPrice: number;
+  items: ProductRecord[];
 }

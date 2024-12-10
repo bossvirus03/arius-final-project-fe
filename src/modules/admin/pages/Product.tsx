@@ -10,7 +10,7 @@ import {
   QuestionCircleOutlined,
   UploadOutlined,
 } from "@ant-design/icons";
-import { ProductResponse } from "../../../types/backend";
+import { ProductRecord, ProductResponse } from "../../../types/backend";
 import useQueryProducts from "../hooks/product/useQueryProducts";
 import useDeleteProduct from "../hooks/product/useDeleteProduct";
 import useImportProducts from "../hooks/product/useImportProducts";
@@ -24,7 +24,7 @@ function Product() {
   const [sortOrder, setSortOrder] = useState<string>("desc");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [actionProduct, setActionProduct] = useState<ProductResponse | null>(
+  const [actionProduct, setActionProduct] = useState<ProductRecord | null>(
     null
   );
 
@@ -34,7 +34,7 @@ function Product() {
   const { createProduct } = useCreateProduct();
   const { updateProduct } = useUpdateProduct();
 
-  const handleTableChange: TableProps<ProductResponse>["onChange"] = (
+  const handleTableChange: TableProps<ProductRecord>["onChange"] = (
     _pagination,
     _filters,
     sorter
@@ -55,7 +55,7 @@ function Product() {
     });
   };
 
-  const columns: TableProps<ProductResponse>["columns"] = [
+  const columns: TableProps<ProductRecord>["columns"] = [
     {
       title: "ID",
       dataIndex: "id",
@@ -186,9 +186,9 @@ function Product() {
         </div>
       </div>
 
-      <Table<ProductResponse>
+      <Table<ProductRecord>
         columns={columns}
-        dataSource={data || []}
+        dataSource={data?.result || []}
         onChange={handleTableChange}
         loading={isPending}
       />

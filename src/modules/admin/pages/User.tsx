@@ -14,7 +14,7 @@ import UserEditModal from "../components/UserEditModal";
 import useQueryUsers from "../hooks/user/useQueryUsers";
 import useDeleteUser from "../hooks/user/useDeleteUser";
 import UserCreateModal from "../components/UserCreateModal";
-import { UserResponse } from "../../../types/backend";
+import { RoleResponse, UserResponse } from "../../../types/backend";
 import useImportUsers from "../hooks/user/useImportUsers";
 import useExportUsers from "../hooks/user/useExportUsers";
 
@@ -87,6 +87,15 @@ function User() {
       title: "Email",
       dataIndex: "email",
       key: "email",
+    },
+    {
+      title: "Roles",
+      key: "roles",
+      dataIndex: "roles",
+      render: (roles: RoleResponse[]) =>
+        roles.map((role) => (
+          <Tag color={role.name == "USER" ? "blue" : "gold"}>{role.name}</Tag>
+        )),
     },
     {
       title: "Active",

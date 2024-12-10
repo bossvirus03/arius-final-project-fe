@@ -45,6 +45,9 @@ function UserEditModal({
               refetch();
               message.info("Update user successfully!");
             },
+            onError: (error: any) => {
+              message.error(error.response.data.message);
+            },
           }
         );
       }

@@ -41,4 +41,10 @@ export const ApiUrls = {
       create: "http://localhost:3050/api/tag",
     },
   },
+  user: {
+    getMe: "http://localhost:3050/api/user/me",
+    cartInfo: "http://localhost:3050/api/cart/mine/info",
+    getProductDetail: "http://localhost:3050/api/product",
+    addProductToCart: "http://localhost:3050/api/cart/add-product/{productId}",
+  },
 };
