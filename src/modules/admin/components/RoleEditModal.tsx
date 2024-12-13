@@ -1,11 +1,11 @@
 import React from "react";
 import { Modal, Form, Input, Button, message } from "antd";
 import useUpdateRole from "../hooks/role/useUpdateRole";
-import { RoleResponse } from "../../../types/backend";
+import { RoleRecord } from "../../../types/backend";
 
 interface RoleEditModalProps {
-  actionRole: RoleResponse | null;
-  setActionRole: (role: RoleResponse | null) => void;
+  actionRole: RoleRecord | null;
+  setActionRole: (role: RoleRecord | null) => void;
   isModalOpen: boolean;
   setIsModalOpen: (isOpen: boolean) => void;
   refetch: () => void;
@@ -52,6 +52,8 @@ function RoleEditModal({
         setActionRole(null);
       }}
       footer={null}
+      maskClosable={false}
+      width={900}
     >
       <Form
         form={form}

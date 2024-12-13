@@ -3,11 +3,13 @@ import { onGetProducts } from "../../services/api";
 
 const useQueryProducts = (
   sortField: string = "id",
-  sortOrder: string = "asc"
+  sortOrder: string = "asc",
+  page: number = 1,
+  size: number = 16
 ) => {
   const { isPending, isError, data, error, refetch } = useQuery({
     queryKey: ["products", sortField, sortOrder],
-    queryFn: () => onGetProducts(sortField, sortOrder),
+    queryFn: () => onGetProducts(sortField, sortOrder, page, size),
   });
   return {
     isPending,

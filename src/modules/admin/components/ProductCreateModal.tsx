@@ -9,49 +9,104 @@ import {
   message,
   Select,
 } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/es/upload";
+import type { UploadFile, UploadProps } from "antd";
+import { useUploadFile } from "../../../hooks/useUploadFile";
+import { useUploadMultifile } from "../../../hooks/useUploadMultifile";
+import useCreateProduct from "../hooks/product/useCreateProduct";
+const { Option } = Select;
+const getBase64 = (file: RcFile): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = (error) => reject(error);
+  });
 
 interface ProductCreateModalProps {
   isModalOpen: boolean;
   setIsModalOpen: (open: boolean) => void;
   refetch: () => void;
-  createProduct: any; // Hook or function to handle product creation
 }
-const { Option } = Select;
+
 const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
   isModalOpen,
   setIsModalOpen,
   refetch,
-  createProduct,
 }) => {
   const [form] = Form.useForm();
   const [thumbnail, setThumbnail] = useState<RcFile | null>(null);
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
+
+  const { createProduct, isPending } = useCreateProduct();
+  const { mutateAsync: uploadThumbnail } = useUploadFile();
+  const { mutateAsync: uploadImages } = useUploadMultifile();
 
   const handleCancel = () => {
     setIsModalOpen(false);
     form.resetFields();
     setThumbnail(null);
+    setFileList([]);
+    setTags([]);
   };
 
-  const handleSubmit = async (values: any) => {
-    const formData = new FormData();
-    formData.append("name", values.name);
-    formData.append("price", values.price);
-    formData.append("discount", values.discount);
-    formData.append("quantity", values.quantity);
-    formData.append("category", values.category);
-    formData.append("tags", values.tags);
-    formData.append("description", values.description);
-    if (thumbnail) {
-      formData.append("thumbnail", thumbnail); // Append file for upload
-    }
+  const uploadButton = (
+    <button style={{ border: 0, background: "none" }} type="button">
+      <PlusOutlined />
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </button>
+  );
 
+  const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
+    setFileList(newFileList);
+
+  const handleSubmit = async (values: any) => {
     try {
-      await createProduct(formData);
-      message.success("Product created successfully!");
-      handleCancel();
-      refetch();
+      // Upload thumbnail
+      let thumbnailUrl = "";
+      if (thumbnail) {
+        thumbnailUrl = await uploadThumbnail({
+          file: thumbnail,
+          folder: "thumbnails",
+        });
+      }
+
+      // Upload multiple images
+      let imageUrls: string[] = [];
+      const files = fileList.map((file) => file.originFileObj as RcFile);
+      if (files.length > 0) {
+        const response = await uploadImages({
+          files,
+          folder: "products",
+        });
+        imageUrls = response;
+      }
+
+      // Prepare data for submission
+      const payload = {
+        name: values.name,
+        price: values.price,
+        discount: values.discount,
+        quantity: values.quantity,
+        category: values.category,
+        tags,
+        description: values.description,
+        thumbnail: thumbnailUrl,
+        images: imageUrls,
+      };
+
+      await createProduct(
+        { body: payload },
+        {
+          onSuccess: () => {
+            message.success("Product created successfully!");
+            handleCancel();
+            refetch();
+          },
+        }
+      );
     } catch (error: any) {
       message.error(`Failed to create product: ${error.message}`);
     }
@@ -70,26 +125,32 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
       open={isModalOpen}
       onCancel={handleCancel}
       footer={null}
+      maskClosable={false}
+      width={900}
     >
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
-        <Form.Item
-          label="Name"
-          name="name"
-          rules={[
-            { required: true, message: "Please input the product name!" },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          label="Price"
-          name="price"
-          rules={[
-            { required: true, message: "Please input the product price!" },
-          ]}
-        >
-          <InputNumber style={{ width: "100%" }} min={0} />
-        </Form.Item>
+        <div className="flex gap-5">
+          <Form.Item
+            className="flex-1"
+            label="Name"
+            name="name"
+            rules={[
+              { required: true, message: "Please input the product name!" },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            className="flex-1"
+            label="Price"
+            name="price"
+            rules={[
+              { required: true, message: "Please input the product price!" },
+            ]}
+          >
+            <InputNumber style={{ width: "100%" }} min={0} />
+          </Form.Item>
+        </div>
         <Form.Item
           label="Description"
           name="description"
@@ -100,7 +161,7 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
             },
           ]}
         >
-          <InputNumber style={{ width: "100%" }} min={0} />
+          <Input />
         </Form.Item>
         <Form.Item
           label="Discount"
@@ -123,6 +184,19 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
         >
           <Input />
         </Form.Item>
+        <Form.Item
+          label="Tags"
+          name="tags"
+          rules={[
+            { required: true, message: "Please select at least one tag!" },
+          ]}
+        >
+          <Select
+            mode="tags"
+            placeholder="Add tags"
+            onChange={(value) => setTags(value)}
+          />
+        </Form.Item>
         <Form.Item label="Thumbnail">
           <Upload {...uploadProps} accept="image/*" maxCount={1}>
             <Button icon={<UploadOutlined />}>Upload Thumbnail</Button>
@@ -130,18 +204,21 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
         </Form.Item>
 
         <Form.Item
-          label="Roles"
-          name="roles"
+          label="Images"
+          name="files"
           rules={[
-            { required: true, type: "array", message: "Please select roles" },
+            { required: true, message: "Please upload at least 1 image!" },
           ]}
         >
-          <Select mode="tags" placeholder="Add roles" style={{ width: "100%" }}>
-            <Option value="BLACK PRIDAY">BLACK PRIDAY</Option>
-            <Option value="SALE">SALE</Option>
-          </Select>
+          <Upload
+            listType="picture-card"
+            fileList={fileList}
+            onChange={handleChange}
+          >
+            {fileList.length >= 8 ? null : uploadButton}
+          </Upload>
         </Form.Item>
-        <Button type="primary" htmlType="submit" block>
+        <Button loading={isPending} type="primary" htmlType="submit" block>
           Create Product
         </Button>
       </Form>

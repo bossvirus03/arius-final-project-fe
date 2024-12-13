@@ -9,7 +9,7 @@ import {
   message,
 } from "antd";
 import React, { useState } from "react";
-import { UserResponse } from "../../../types/backend";
+import { UserRecord } from "../../../types/backend";
 import useUpdateUser from "../hooks/user/useUpdateUser";
 import moment from "moment";
 import dayjs from "dayjs";
@@ -25,8 +25,8 @@ function UserEditModal({
 }: {
   isModalOpen: boolean;
   setIsModalOpen: (value: boolean) => void;
-  actionUser: UserResponse | null;
-  setActionUser: (value: UserResponse | null) => void;
+  actionUser: UserRecord | null;
+  setActionUser: (value: UserRecord | null) => void;
   refetch: () => void;
 }) {
   const { updateUser, isPending } = useUpdateUser();

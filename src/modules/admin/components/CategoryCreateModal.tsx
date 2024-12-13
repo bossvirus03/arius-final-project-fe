@@ -38,6 +38,8 @@ function CategoryCreateModal({
       open={isModalOpen}
       onCancel={() => setIsModalOpen(false)}
       footer={null}
+      maskClosable={false}
+      width={900}
     >
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
         <Form.Item

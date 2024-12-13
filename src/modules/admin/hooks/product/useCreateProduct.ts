@@ -4,9 +4,7 @@ import { onCreateProduct } from "../../services/api";
 const useCreateProduct = () => {
   const mutation = useMutation({
     mutationFn: onCreateProduct,
-    onSuccess: () => {
-      // Invalidate the products query to refetch the created list
-    },
+    onSuccess: () => {},
   });
 
   const { mutate, isPending, isError, isSuccess, error } = mutation;

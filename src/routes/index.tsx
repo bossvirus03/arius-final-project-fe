@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, Outlet } from "react-router";
 import AppContainer from "../layouts/AppContainer";
 import AuthContainer from "../layouts/AuthContainer";
 import Login from "../modules/auth/pages/Login";
@@ -10,11 +10,18 @@ import Role from "../modules/admin/pages/Role";
 import Product from "../modules/admin/pages/Product";
 import Category from "../modules/admin/pages/Category";
 import Tags from "../modules/admin/pages/Tags";
-import HomeLayout from "../modules/main/layouts/HomeLayout";
 import Main from "../modules/main/pages/Main";
 import Shop from "../modules/main/modules/shop/pages/Shop";
 import ProductDetail from "../modules/main/modules/shop/pages/ProductDetail";
-import ShopLayout from "../modules/main/modules/shop/layouts/ShopLayout";
+import Cart from "../modules/main/modules/cart/pages/Cart";
+import About from "../modules/main/modules/about/pages/About";
+import Contact from "../modules/main/modules/contact/pages/Contact";
+import Checkout from "../modules/main/modules/checkout/pages/Checkout";
+import MainLayout from "../modules/main/layouts/MainLayout";
+import Search from "../modules/main/modules/search/pages/Search";
+import Order from "../modules/main/modules/order/pages/Order";
+import OrderDetail from "../modules/main/modules/order/pages/OrderDetail";
+import AdminOrderPage from "../modules/admin/pages/AdminOrderPage";
 
 export const browserRouters = createBrowserRouter([
   {
@@ -23,7 +30,7 @@ export const browserRouters = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <HomeLayout />,
+        element: <MainLayout />,
         children: [
           {
             path: "",
@@ -31,7 +38,7 @@ export const browserRouters = createBrowserRouter([
           },
           {
             path: "shop",
-            element: <ShopLayout />, // Wrapping Shop and children
+            element: <Outlet />, // Wrapping Shop and children
             children: [
               {
                 path: "",
@@ -40,6 +47,70 @@ export const browserRouters = createBrowserRouter([
               {
                 path: ":id",
                 element: <ProductDetail />,
+              },
+            ],
+          },
+          {
+            path: "cart",
+            element: <Outlet />,
+            children: [
+              {
+                path: "",
+                element: <Cart />,
+              },
+            ],
+          },
+          {
+            path: "about",
+            element: <Outlet />,
+            children: [
+              {
+                path: "",
+                element: <About />,
+              },
+            ],
+          },
+          {
+            path: "contact",
+            element: <Outlet />,
+            children: [
+              {
+                path: "",
+                element: <Contact />,
+              },
+            ],
+          },
+          {
+            path: "search",
+            element: <Outlet />,
+            children: [
+              {
+                path: "",
+                element: <Search />,
+              },
+            ],
+          },
+          {
+            path: "checkout",
+            element: <Outlet />,
+            children: [
+              {
+                path: "",
+                element: <Checkout />,
+              },
+            ],
+          },
+          {
+            path: "order",
+            element: <Outlet />,
+            children: [
+              {
+                path: "",
+                element: <Order />,
+              },
+              {
+                path: ":id",
+                element: <OrderDetail />,
               },
             ],
           },
@@ -72,6 +143,10 @@ export const browserRouters = createBrowserRouter([
           {
             path: "tags",
             element: <Tags />,
+          },
+          {
+            path: "order",
+            element: <AdminOrderPage />,
           },
         ],
       },

@@ -16,7 +16,7 @@ function Footer() {
           <div className="font-semibold">
             <h2 className="text-[#9F9F9F]">Links</h2>
             <ul>
-              <li>HomeLayout</li>
+              <li>MainLayout</li>
               <li>Shop</li>
               <li>About</li>
               <li>Contact</li>

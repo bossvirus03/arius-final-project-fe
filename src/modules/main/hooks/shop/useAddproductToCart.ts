@@ -1,10 +1,18 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { onAddProductToCart } from "../../services/api";
+import { CartStore, useCartStore } from "../../../../store/cart.store";
 
 const useAddProductToCart = () => {
+  const { setCartInfo }: CartStore = useCartStore();
   const muatation = useMutation({
     mutationFn: onAddProductToCart,
-    onSuccess: () => {},
+    onSuccess: (newCartItem) => {
+      setCartInfo(
+        newCartItem.items,
+        newCartItem.itemCount,
+        newCartItem.totalPrice
+      );
+    },
     onError: (error: any) => {
       console.error(
         "Failed to add product to cart:",

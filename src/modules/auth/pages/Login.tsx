@@ -1,12 +1,19 @@
-import { Button, Form, FormProps, Input } from "antd";
+import { Button, Form, FormProps, Input, message } from "antd";
 import GoogleColorIcon from "../../../components/Icons/GoogleColorIcon";
 import useLogin, { LoginCredentials } from "../hooks/useLogin";
 
 function Login() {
   const { loginUser, isPending } = useLogin();
   const onFinish: FormProps<LoginCredentials>["onFinish"] = (values) => {
-    loginUser({ ...values });
-};
+    loginUser(
+      { ...values },
+      {
+        onSuccess: () => {
+          message.success("Login successfully");
+        },
+      }
+    );
+  };
 
   const onFinishFailed: FormProps<LoginCredentials>["onFinishFailed"] = (
     errorInfo
@@ -16,9 +23,9 @@ function Login() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="flex w-full max-w-4xl shadow-lg bg-white rounded-lg overflow-hidden">
+      <div className="flex w-full max-w-4xl overflow-hidden bg-white rounded-lg shadow-lg">
         {/* Left Section (Image or Illustration) */}
-        <div className="w-1/2 bg-blue-500 flex items-center justify-center">
+        <div className="flex items-center justify-center w-1/2 bg-blue-500">
           <img
             src="https://images.pexels.com/photos/3612182/pexels-photo-3612182.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
             alt="Login Illustration"
@@ -27,16 +34,16 @@ function Login() {
         </div>
 
         {/* Right Section (Login Form) */}
-        <div className="w-1/2 p-10 flex flex-col justify-center">
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">FASCO</h1>
-          <h3 className="text-xl font-semibold text-gray-600 mb-6">
+        <div className="flex flex-col justify-center w-1/2 p-10">
+          <h1 className="mb-4 text-4xl font-bold text-gray-800">FASCO</h1>
+          <h3 className="mb-6 text-xl font-semibold text-gray-600">
             Sign In to FASCO
           </h3>
 
           {/* Social Login Buttons */}
-          <div className="space-y-4 mb-6">
+          <div className="mb-6 space-y-4">
             <Button
-              className="h-12 w-full border border-gray-300 text-gray-700 flex items-center justify-center hover:bg-gray-100"
+              className="flex items-center justify-center w-full h-12 text-gray-700 border border-gray-300 hover:bg-gray-100"
               icon={<GoogleColorIcon />}
               onClick={() => {}}
             >
@@ -45,8 +52,8 @@ function Login() {
           </div>
 
           {/* Divider */}
-          <div className="relative text-center mb-6">
-            <span className="text-gray-500 bg-white px-3">or</span>
+          <div className="relative mb-6 text-center">
+            <span className="px-3 text-gray-600 bg-white">or</span>
             <div className="absolute inset-0 h-px bg-gray-300" />
           </div>
 
@@ -67,7 +74,7 @@ function Login() {
             >
               <Input
                 placeholder="Enter your username"
-                className="h-12 w-full border-gray-300 rounded-lg"
+                className="w-full h-12 border-gray-300 rounded-lg"
               />
             </Form.Item>
 
@@ -80,7 +87,7 @@ function Login() {
             >
               <Input.Password
                 placeholder="Enter your password"
-                className="h-12 w-full border-gray-300 rounded-lg"
+                className="w-full h-12 border-gray-300 rounded-lg"
               />
             </Form.Item>
 
@@ -88,7 +95,7 @@ function Login() {
               <Button
                 type="primary"
                 htmlType="submit"
-                className="h-12 w-full bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600"
+                className="w-full h-12 font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600"
               >
                 {isPending ? "Signing In..." : "Sign In"}
               </Button>

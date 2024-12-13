@@ -51,11 +51,11 @@ const Breadcrumb = () => {
           ].join(" ")}
         >
           {crumbs.length < 2 && (
-            <h1 className="z-30 mb-2 text-5xl font-semibold text-center text-gray-800">
-              Shop
+            <h1 className="z-[4] mb-2 text-5xl font-semibold text-center text-gray-800 first-letter:uppercase">
+              {location.pathname.split("/")[1]}
             </h1>
           )}
-          <nav className="z-30 text-sm text-gray-600">
+          <nav className="z-[4] text-sm text-gray-600">
             <ul className="flex items-center space-x-2">
               <li>
                 <a href="/" className="hover:text-gray-800 hover:font-semibold">

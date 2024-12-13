@@ -14,7 +14,7 @@ import UserEditModal from "../components/UserEditModal";
 import useQueryUsers from "../hooks/user/useQueryUsers";
 import useDeleteUser from "../hooks/user/useDeleteUser";
 import UserCreateModal from "../components/UserCreateModal";
-import { RoleResponse, UserResponse } from "../../../types/backend";
+import { RoleRecord, UserRecord } from "../../../types/backend";
 import useImportUsers from "../hooks/user/useImportUsers";
 import useExportUsers from "../hooks/user/useExportUsers";
 
@@ -23,14 +23,14 @@ function User() {
   const [sortOrder, setSortOrder] = useState<string>("desc");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [actionUser, setActionUser] = useState<UserResponse | null>(null);
+  const [actionUser, setActionUser] = useState<UserRecord | null>(null);
 
   const { data, isLoading, refetch } = useQueryUsers(sortField, sortOrder);
   const { deleteUser } = useDeleteUser();
   const { importUsers, isImporting } = useImportUsers();
   const { exportUsers, isExporting } = useExportUsers();
 
-  const handleTableChange: TableProps<UserResponse>["onChange"] = (
+  const handleTableChange: TableProps<UserRecord>["onChange"] = (
     _pagination,
     _filters,
     sorter
@@ -55,7 +55,7 @@ function User() {
     exportUsers();
   };
 
-  const columns: TableProps<UserResponse>["columns"] = [
+  const columns: TableProps<UserRecord>["columns"] = [
     {
       title: "ID",
       dataIndex: "id",
@@ -63,9 +63,15 @@ function User() {
     },
     {
       sorter: true,
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: "First Name",
+      dataIndex: "firstName",
+      key: "firstName",
+    },
+    {
+      sorter: true,
+      title: "Last Name",
+      dataIndex: "lastName",
+      key: "lastName",
     },
     {
       sorter: true,
@@ -92,7 +98,7 @@ function User() {
       title: "Roles",
       key: "roles",
       dataIndex: "roles",
-      render: (roles: RoleResponse[]) =>
+      render: (roles: RoleRecord[]) =>
         roles.map((role) => (
           <Tag color={role.name == "USER" ? "blue" : "gold"}>{role.name}</Tag>
         )),
@@ -186,7 +192,7 @@ function User() {
         </div>
       </div>
 
-      <Table<UserResponse>
+      <Table<UserRecord>
         columns={columns}
         dataSource={data || []}
         onChange={handleTableChange}

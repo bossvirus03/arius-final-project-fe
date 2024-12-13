@@ -12,7 +12,7 @@ function FavoriteIcon() {
       <path
         d="M7.99973 13.0361C-5.33333 5.66667 3.99999 -2.33333 7.99973 2.72537C12 -2.33334 21.3333 5.66667 7.99973 13.0361Z"
         stroke="white"
-        stroke-width="1.8"
+        strokeWidth="1.8"
       />
     </svg>
   );

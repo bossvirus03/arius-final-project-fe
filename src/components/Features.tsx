@@ -6,8 +6,8 @@ import CallSupportIcon from "./Icons/CallSupportIcon";
 
 function Features() {
   return (
-    <div className="bg-[#FAF3EA] py-[100px] px-[53px]">
-      <ul className="container grid grid-cols-1 gap-6 px-4 py-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 justify-items-center">
+    <div className="bg-[#FAF3EA] py-[100px] px-[53px] flex justify-center">
+      <ul className="container grid grid-cols-1 gap-6 px-4 py-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  justify-items-center">
         <li className="flex items-center justify-center gap-4">
           <CupIcon />
           <div>

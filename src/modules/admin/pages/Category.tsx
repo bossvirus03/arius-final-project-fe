@@ -7,7 +7,7 @@ import {
   PlusOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
-import { CategoryResponse } from "../../../types/backend";
+import { CategoryRecord } from "../../../types/backend";
 import useQueryCategories from "../hooks/category/useQueryCategories";
 import CategoryCreateModal from "../components/CategoryCreateModal";
 import useDeleteCategory from "../hooks/category/useDeleteCategory";
@@ -16,7 +16,7 @@ import CategoryEditModal from "../components/CategoryEditModal";
 function Category() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [actionCategory, setActionCategory] = useState<CategoryResponse | null>(
+  const [actionCategory, setActionCategory] = useState<CategoryRecord | null>(
     null
   );
 
@@ -33,7 +33,7 @@ function Category() {
     });
   };
 
-  const columns: TableProps<CategoryResponse>["columns"] = [
+  const columns: TableProps<CategoryRecord>["columns"] = [
     {
       title: "Name",
       dataIndex: "name",
@@ -86,8 +86,7 @@ function Category() {
           refetch={refetch}
         />
       </div>
-
-      <Table<CategoryResponse>
+      <Table<CategoryRecord>
         columns={columns}
         dataSource={data || []}
         loading={isPending}

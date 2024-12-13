@@ -3,7 +3,17 @@ import FilterIcon from "./Icons/FilterIcon";
 import GridViewIcon from "./Icons/GridViewIcon";
 import ViewListIcon from "./Icons/ViewListIcon";
 
-function FilterBar({
+interface FilterBarProps {
+  setPageSize: (pageSize: number) => void;
+  setSortField: (field: string) => void;
+  setSortOrder: (order: string) => void;
+  startIndex: number;
+  endIndex: number;
+  total: number;
+  pageSize: number;
+}
+
+const FilterBar: React.FC<FilterBarProps> = ({
   setPageSize,
   setSortField,
   setSortOrder,
@@ -11,7 +21,7 @@ function FilterBar({
   endIndex,
   total,
   pageSize,
-}: any) {
+}: FilterBarProps) => {
   return (
     <div className="bg-[#FBF4EC] border-gray-200 border-t border-b px-8 py-4">
       <div className="container flex items-center justify-between">
@@ -38,7 +48,7 @@ function FilterBar({
           <div className="flex items-center space-x-2">
             <span className="text-sm text-gray-700">Show</span>
             <select
-              defaultValue={pageSize}
+              value={pageSize} // Use value instead of defaultValue for controlled component
               className="px-2 py-1 text-sm border border-gray-300 rounded"
               onChange={(e) => setPageSize(Number(e.target.value))}
             >
@@ -53,11 +63,11 @@ function FilterBar({
             <span className="text-sm text-gray-700">Sort by</span>
             <select
               className="px-2 py-1 text-sm border border-gray-300 rounded"
-              onChange={(e) => {
-                const [field, order] = e.target.value.split("_");
-                setSortField(field);
-                setSortOrder(order);
-              }}
+              // onChange={(e) => {
+              //   const [field, order] = e.target.value.split("_");
+              //   setSortField(field);
+              //   setSortOrder(order);
+              // }}
             >
               <option value="default">Default</option>
               <option value="price_low">Price: Low to High</option>
@@ -68,6 +78,6 @@ function FilterBar({
       </div>
     </div>
   );
-}
+};
 
 export default FilterBar;

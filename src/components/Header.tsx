@@ -1,113 +1,158 @@
-import React, { useEffect } from "react";
-import { Dropdown, Menu } from "antd";
+import React, { useEffect, useState } from "react";
+import { Dropdown, Menu, MenuProps } from "antd";
+import { Link } from "react-router-dom";
 import Logo from "./Icons/Logo";
-import { SmileOutlined } from "@ant-design/icons";
 import AccountIcon from "./Icons/AccountIcon";
-import InputWithIcon from "./InputWithIcon";
-import InputIcon from "./Icons/InputIcon";
 import HeartIcon from "./Icons/HeartIcon";
 import CartIcon from "./Icons/CartIcon";
-import { Link } from "react-router";
 import { useCartStore } from "../store/cart.store";
 import { useQueryCartInfo } from "../hooks/useQueryCartInfo";
+import CartOverLay from "./CartOverLay";
+import LogoutIcon from "./Icons/LogoutIcon";
+import PersonIcon from "./Icons/PersonIcon";
+import { getRefreshToken } from "../utils/token";
+import useLogout from "../hooks/useLogout";
+import SearchInput from "./SearchInput";
 
 function Header() {
   const { data } = useQueryCartInfo();
-  const { setCartInfo }: any = useCartStore();
+  const { setCartInfo, totalItem, cartItem } = useCartStore();
+  const [isCartOverlayOpen, setCartOverlayOpen] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+
+  const { logoutUser, isPending } = useLogout();
+  const [searchValue, setSearchValue] = useState<string>("");
   useEffect(() => {
     if (data) {
       setCartInfo(data.items, data.itemCount, data.totalPrice);
-      console.log(data);
     }
-  }, [data]);
-  const accountMenuItems = [
+  }, [data, setCartInfo]);
+
+  const handleLogout = () => {
+    const refreshToken = getRefreshToken();
+    if (!refreshToken) return;
+    logoutUser({ token: refreshToken }, {});
+  };
+
+  const items: MenuProps["items"] = [
     {
+      label: (
+        <Link
+          className="w-[150px] flex items-center justify-center gap-3 font-semibold after:w-100%"
+          to={"#"}
+          style={{ width: "150px" }}
+        >
+          <PersonIcon />
+          Profile
+        </Link>
+      ),
+      key: "0",
+    },
+    {
+      label: (
+        <Link
+          className="flex items-center justify-center gap-3 font-semibold"
+          to={"#"}
+          style={{ width: "150px" }}
+        >
+          <CartIcon />
+          Cart
+        </Link>
+      ),
+      key: "0",
+    },
+    {
+      label: <Link to={"#"}>2nd menu item</Link>,
       key: "1",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.antgroup.com"
-        >
-          1st menu item
-        </a>
-      ),
     },
     {
-      key: "2",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.aliyun.com"
-        >
-          2nd menu item (disabled)
-        </a>
-      ),
-      icon: <SmileOutlined />,
-      disabled: true,
+      type: "divider",
     },
     {
+      label: (
+        <button
+          onClick={handleLogout}
+          className="flex items-center justify-center gap-3 font-semibold text-red-500"
+        >
+          <LogoutIcon />
+          Logout
+        </button>
+      ),
       key: "3",
-      label: (
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.luohanacademy.com"
-        >
-          3rd menu item (disabled)
-        </a>
-      ),
-      disabled: true,
-    },
-    {
-      key: "4",
-      danger: true,
-      label: "a danger item",
     },
   ];
 
   return (
-    <div className="h-[100px] w-full fixed top-0 z-[9999] bg-[#fff] flex justify-center items-center">
-      <div className="container flex items-center justify-between w-full m-0">
-        <div className="text-2xl font-semibold text-[#5e6085]">
-          <Link to={"/"}>
+    <div className="h-[100px] w-full fixed top-0 z-10 bg-white flex justify-center items-center shadow-md">
+      <div className="container flex items-center justify-between">
+        <div className="text-2xl font-semibold text-gray-700">
+          <Link to="/">
             <Logo />
           </Link>
         </div>
-        <div>
-          <div>
-            <ul className="flex font-semibold gap-[75px]">
-              <li>
-                <Link to={"/"}>Home</Link>
-              </li>
-              <li>
-                <Link to={"/shop"}>Shop</Link>
-              </li>
-              <li>
-                <Link to={"/about"}>About</Link>
-              </li>
-              <li>
-                <Link to={"/contact"}>Contact</Link>
-              </li>
-            </ul>
+        <ul className="flex font-semibold gap-[75px]">
+          <li>
+            <Link className="relative transition-all group" to="/">
+              Home
+              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gold-500 rounded-full transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+          </li>
+          <li>
+            <Link className="relative transition-all group" to="/shop">
+              Shop
+              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gold-500 rounded-full transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+          </li>
+          <li>
+            <Link className="relative transition-all group" to="/about">
+              About
+              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gold-500 rounded-full transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+          </li>
+          <li>
+            <Link className="relative transition-all group" to="/contact">
+              Contact
+              <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-gold-500 rounded-full transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+          </li>
+        </ul>
+        <div className="flex items-center gap-8">
+          {/* Conditionally render the expanding search input */}
+          <SearchInput
+            value={searchValue}
+            isFocused={isFocused}
+            setIsFocused={setIsFocused}
+            onChange={(e) => {
+              setIsFocused(true);
+              setSearchValue(e.target.value);
+            }}
+          />
+
+          <HeartIcon />
+          <div className="relative">
+            <button
+              onClick={() => setCartOverlayOpen((prev) => !prev)}
+              className="relative"
+            >
+              <CartIcon />
+              <span className="absolute -top-[7px] -right-1 bg-red-500 text-white text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+                {totalItem}
+              </span>
+            </button>
           </div>
-        </div>
-        <div className="flex gap-[45px]">
-          <Dropdown menu={{ items: accountMenuItems }}>
-            <AccountIcon />
+          <Dropdown menu={{ items }} placement="bottom" trigger={["click"]}>
+            <a href="#account">
+              <AccountIcon />
+            </a>
           </Dropdown>
-          <div>
-            <InputIcon />
-          </div>
-          <div>
-            <HeartIcon />
-          </div>
-          <div>
-            <CartIcon />
-          </div>
         </div>
       </div>
+      {isCartOverlayOpen && (
+        <CartOverLay
+          cartItem={cartItem}
+          onClose={() => setCartOverlayOpen(false)}
+        />
+      )}
     </div>
   );
 }

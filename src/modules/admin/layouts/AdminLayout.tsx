@@ -103,6 +103,11 @@ function AdminLayout() {
               icon: <TagOutlined />,
               label: <NavLink to={"tags"}>Tags</NavLink>,
             },
+            {
+              key: "order",
+              icon: <TagOutlined />,
+              label: <NavLink to={"order"}>Order</NavLink>,
+            },
           ]}
         />
       </Sider>

@@ -52,6 +52,8 @@ function TagEditModal({
         setActionTag(null);
       }}
       footer={null}
+      maskClosable={false}
+      width={900}
     >
       <Form
         form={form}
@@ -62,9 +64,7 @@ function TagEditModal({
         <Form.Item
           label="Name"
           name="name"
-          rules={[
-            { required: true, message: "Please enter the tag name" },
-          ]}
+          rules={[{ required: true, message: "Please enter the tag name" }]}
         >
           <Input placeholder="Enter tag name" />
         </Form.Item>

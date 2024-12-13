@@ -1,11 +1,11 @@
 import React from "react";
 import { Modal, Form, Input, Button, message } from "antd";
 import useUpdateCategory from "../hooks/category/useUpdateCategory";
-import { CategoryResponse } from "../../../types/backend";
+import { CategoryRecord } from "../../../types/backend";
 
 interface CategoryEditModalProps {
-  actionCategory: CategoryResponse | null;
-  setActionCategory: (category: CategoryResponse | null) => void;
+  actionCategory: CategoryRecord | null;
+  setActionCategory: (category: CategoryRecord | null) => void;
   isModalOpen: boolean;
   setIsModalOpen: (isOpen: boolean) => void;
   refetch: () => void;
@@ -52,6 +52,8 @@ function CategoryEditModal({
         setActionCategory(null);
       }}
       footer={null}
+      maskClosable={false}
+      width={900}
     >
       <Form
         form={form}

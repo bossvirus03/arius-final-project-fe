@@ -29,7 +29,6 @@ function UserCreateModal({
   const handleOk = async () => {
     try {
       const body = await form.validateFields();
-      console.log(body);
       createUser(
         { body },
         {

@@ -8,7 +8,7 @@ import {
   QuestionCircleOutlined,
 } from "@ant-design/icons";
 import useDeleteRole from "../hooks/role/useDeleteRole";
-import { RoleResponse } from "../../../types/backend";
+import { RoleRecord } from "../../../types/backend";
 import useQueryRoles from "../hooks/role/useQueryRoles";
 import RoleCreateModal from "../components/RoleCreateModal";
 import RoleEditModal from "../components/RoleEditModal";
@@ -16,7 +16,7 @@ import RoleEditModal from "../components/RoleEditModal";
 function Role() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [actionRole, setActionRole] = useState<RoleResponse | null>(null);
+  const [actionRole, setActionRole] = useState<RoleRecord | null>(null);
 
   const { data, isPending, refetch } = useQueryRoles();
   const { deleteRole } = useDeleteRole();
@@ -31,7 +31,7 @@ function Role() {
     });
   };
 
-  const columns: TableProps<RoleResponse>["columns"] = [
+  const columns: TableProps<RoleRecord>["columns"] = [
     {
       title: "Name",
       dataIndex: "name",
@@ -85,7 +85,7 @@ function Role() {
         />
       </div>
 
-      <Table<RoleResponse>
+      <Table<RoleRecord>
         columns={columns}
         dataSource={data || []}
         loading={isPending}

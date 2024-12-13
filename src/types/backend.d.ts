@@ -17,29 +17,51 @@ export interface UpdateUserRequest {
   roles: string[];
 }
 
-export interface UpdateProductRequest {}
+export interface UpdateProductRequest {
+  name: string;
+  images: string[];
+  price: number;
+  category: string;
+  tags: string[];
+  quantity: number;
+  discount: number;
+  description: string;
+  thumbnail: string;
+}
 
-export interface CreateProductRequest {}
+export interface CreateProductRequest {
+  name: string;
+  images: string[];
+  price: number;
+  category: string;
+  tags: string[];
+  quantity: number;
+  discount: number;
+  description: string;
+  thumbnail: string;
+}
 
 export interface CreateRoleRequest {
   name: string;
   description: string;
 }
+
 export interface UpdateRoleRequest {
   name: string;
   description: string;
 }
+
 export interface UpdateCategoryRequest {
   name: string;
   description: string;
 }
 
-export interface RoleResponse {
+export interface RoleRecord {
   name: string;
   description?: string;
 }
 
-export interface CategoryResponse {
+export interface CategoryRecord {
   name: string;
   description?: string;
 }
@@ -79,7 +101,7 @@ export interface ProductResponse {
   result: ProductRecord[];
 }
 
-export interface UserResponse {
+export interface UserRecord {
   id: string;
   username: string;
   name: string;
@@ -90,7 +112,7 @@ export interface UserResponse {
   phone: string;
   active: boolean;
   avatar: String;
-  roles: RoleResponse[];
+  roles: RoleRecord[];
 }
 
 export interface IBackendResponse<T> {
@@ -110,5 +132,54 @@ export interface ILoginResponse {
 export interface CartInfoResponse {
   itemCount: number;
   totalPrice: number;
-  items: ProductRecord[];
+  items: CartInfoProductResponse[];
+}
+
+export interface CartInfoProductResponse {
+  quantity: number;
+  itemDetail: ProductRecord;
+}
+
+export interface CheckoutItemProductResponse {
+  quantity: number;
+  itemDetail: ProductRecord;
+}
+
+export interface SearchProductResponse {
+  data: ProductRecord[];
+  totalPages: number;
+  totalElements: number;
+}
+
+export interface GetOrdersResponse {
+  data: OrderRecord[];
+}
+
+export interface OrderRecord {
+  orderId: string;
+  orderDate: string;
+  totalMoney: number;
+  status: string;
+  paymentMethod: string;
+  shippingAddress: string;
+  shippingFee: number;
+  shippingMethod: string;
+  shippingStatus: string;
+  estimatedDeliveryDate: string;
+  orderDetails: OrderDetail[];
+}
+
+export interface OrderDetail {
+  product: ProductRecord[];
+  quantity: number;
+  price: number;
+}
+
+export interface GetOrderDetailResponse {
+  data: OrderDetail;
+}
+
+export interface IBackendEntity<T> {
+  code: number;
+  data: T;
 }

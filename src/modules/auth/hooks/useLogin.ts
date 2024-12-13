@@ -26,7 +26,7 @@ const useLogin = () => {
       } else {
         navigate("/");
       }
-      appState.setUserData(userData);
+      // appState.setUserData({ data: userData });
     },
   });
   return {

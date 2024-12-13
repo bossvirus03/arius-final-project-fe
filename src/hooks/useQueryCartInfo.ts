@@ -1,16 +1,11 @@
-import axios from "axios";
 import { onGetCartInfo } from "../services/api";
-import { useCartStore } from "../store/cart.store";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { CartInfoResponse } from "../types/backend";
+import { useQuery } from "@tanstack/react-query";
 
 export const useQueryCartInfo = () => {
-  const setCartInfo = useCartStore((state: any) => state.setCartInfo);
-
-  const mutation = useQuery({
+  const query = useQuery({
     queryKey: ["cart-info"],
     queryFn: onGetCartInfo,
   });
-  const { data, isPending, isError, error } = mutation;
+  const { data, isPending, isError, error } = query;
   return { data, isPending, isError, error };
 };

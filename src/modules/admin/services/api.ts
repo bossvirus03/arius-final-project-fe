@@ -1,18 +1,22 @@
 import { ApiUrls } from "../../../configs/url";
 import api from "../../../services/axios";
 import {
-  CategoryResponse,
+  CategoryRecord,
+  CreateProductRequest,
   CreateRoleRequest,
   CreateUserRequest,
+  GetOrderDetailResponse,
+  IBackendEntity,
+  OrderRecord,
   ProductResponse,
-  RoleResponse,
+  RoleRecord,
   TagResponse,
   UpdateCategoryRequest,
   UpdateProductRequest,
   UpdateRoleRequest,
   UpdateTagRequest,
   UpdateUserRequest,
-  UserResponse,
+  UserRecord,
 } from "../../../types/backend";
 
 // USER
@@ -23,17 +27,14 @@ export const onUpdateUser = ({
   userId: string;
   updates: UpdateUserRequest;
 }) => {
-  return api.put<UserResponse>(
-    `${ApiUrls.admin.user.update}/${userId}`,
-    updates
-  );
+  return api.put<UserRecord>(`${ApiUrls.admin.user.update}/${userId}`, updates);
 };
 export const onCreateUser = ({ body }: { body: CreateUserRequest }) => {
-  return api.post<UserResponse>(`${ApiUrls.admin.user.update}`, body);
+  return api.post<UserRecord>(`${ApiUrls.admin.user.update}`, body);
 };
 
 export const onDeleteUser = (userId: string) => {
-  return api.delete<UserResponse>(`${ApiUrls.admin.user.delete}/${userId}`);
+  return api.delete<UserRecord>(`${ApiUrls.admin.user.delete}/${userId}`);
 };
 
 export const onImportUsers = ({ file }: { file: File }) => {
@@ -91,7 +92,7 @@ export const onUpdateProduct = ({
   );
 };
 
-export const onCreateProduct = ({ body }: { body: ProductResponse }) => {
+export const onCreateProduct = ({ body }: { body: CreateProductRequest }) => {
   return api.post<ProductResponse>(`${ApiUrls.admin.product.create}`, body);
 };
 
@@ -123,13 +124,13 @@ export const onExportProducts = () => {
 };
 
 // CATEGORY
-export const onGetCategories = async (): Promise<CategoryResponse[]> => {
+export const onGetCategories = async (): Promise<CategoryRecord[]> => {
   const data = await api.get(ApiUrls.admin.category.getAll);
   return data?.data.data;
 };
 
 export const onCreateCategory = ({ body }: { body: CreateRoleRequest }) => {
-  return api.post<CategoryResponse>(`${ApiUrls.admin.category.create}`, body);
+  return api.post<CategoryRecord>(`${ApiUrls.admin.category.create}`, body);
 };
 
 export const onUpdateCategory = ({
@@ -139,7 +140,7 @@ export const onUpdateCategory = ({
   category: string;
   updates: UpdateCategoryRequest;
 }) => {
-  return api.put<UserResponse>(
+  return api.put<UserRecord>(
     `${ApiUrls.admin.category.update}/${category}`,
     updates
   );
@@ -165,20 +166,20 @@ export const onUpdateTag = ({
   tag: string;
   updates: UpdateTagRequest;
 }) => {
-  return api.put<UserResponse>(`${ApiUrls.admin.tag.update}/${tag}`, updates);
+  return api.put<UserRecord>(`${ApiUrls.admin.tag.update}/${tag}`, updates);
 };
 
 export const onDeleteTag = (categoy: string) => {
   return api.delete<String>(`${ApiUrls.admin.category.delete}/${categoy}`);
 };
 // ROLES
-export const onGetRoles = async (): Promise<RoleResponse[]> => {
+export const onGetRoles = async (): Promise<RoleRecord[]> => {
   const data = await api.get(ApiUrls.admin.role.getAll);
   return data?.data.data;
 };
 
 export const onCreateRole = ({ body }: { body: CreateRoleRequest }) => {
-  return api.post<RoleResponse>(`${ApiUrls.admin.role.update}`, body);
+  return api.post<RoleRecord>(`${ApiUrls.admin.role.update}`, body);
 };
 
 export const onDeleteRole = (role: string) => {
@@ -192,5 +193,84 @@ export const onUpdateRole = ({
   role: string;
   updates: UpdateRoleRequest;
 }) => {
-  return api.put<UserResponse>(`${ApiUrls.admin.role.update}/${role}`, updates);
+  return api.put<UserRecord>(`${ApiUrls.admin.role.update}/${role}`, updates);
+};
+
+// ORDER
+export const onGetOrders = async (): Promise<OrderRecord[]> => {
+  const data = await api.get(ApiUrls.admin.order.getAll);
+  return data?.data.data;
+};
+
+export const onUpdateShippingStatus = async ({
+  orderId,
+  newShippingStatus,
+}: {
+  orderId: string;
+  newShippingStatus: string;
+}): Promise<OrderRecord> => {
+  const response = await api.put(
+    `${ApiUrls.admin.order.updateOrderStatus}/${orderId}/shipping-status`,
+    null,
+    {
+      params: { newShippingStatus },
+    }
+  );
+  return response.data.data;
+};
+
+export const onUpdateOrderStatus = async ({
+  orderId,
+  newStatus,
+}: {
+  orderId: string;
+  newStatus: string;
+}): Promise<OrderRecord> => {
+  const response = await api.put(
+    `${ApiUrls.admin.order.updateShippingStatus}/${orderId}/status`,
+    null,
+    {
+      params: { newStatus },
+    }
+  );
+  return response.data.data;
+};
+
+// UPLOAD FILE
+export const onUploadFiles = async (files: File[], folder: string) => {
+  const formData = new FormData();
+
+  files.forEach((file) => {
+    formData.append("files", file);
+  });
+
+  const response = await api.post<{ data: string[] }>(
+    ApiUrls.user.uploadMultiFile + `?folder=${folder}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return response.data.data;
+};
+
+export const onUploadFile = async (file: File, folder: string) => {
+  const formData = new FormData();
+
+  formData.append("file", file);
+
+  const response = await api.post<any>(
+    ApiUrls.user.uploadFile + `?folder=${folder}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  );
+
+  return response?.data?.data;
 };

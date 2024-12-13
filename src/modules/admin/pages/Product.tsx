@@ -31,7 +31,6 @@ function Product() {
   const { data, isPending, refetch } = useQueryProducts(sortField, sortOrder);
   const { deleteProduct } = useDeleteProduct();
   const { importProducts, isImporting } = useImportProducts();
-  const { createProduct } = useCreateProduct();
   const { updateProduct } = useUpdateProduct();
 
   const handleTableChange: TableProps<ProductRecord>["onChange"] = (
@@ -181,7 +180,6 @@ function Product() {
             isModalOpen={isCreateModalOpen}
             setIsModalOpen={setIsCreateModalOpen}
             refetch={refetch}
-            createProduct={createProduct}
           />
         </div>
       </div>
