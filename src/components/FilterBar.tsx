@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import FilterIcon from "./Icons/FilterIcon";
 import GridViewIcon from "./Icons/GridViewIcon";
 import ViewListIcon from "./Icons/ViewListIcon";
@@ -80,4 +80,4 @@ const FilterBar: React.FC<FilterBarProps> = ({
   );
 };
 
-export default FilterBar;
+export default memo(FilterBar);

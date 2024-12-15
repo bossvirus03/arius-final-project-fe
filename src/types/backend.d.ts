@@ -1,3 +1,5 @@
+import { ProductStatus } from "./backend.enum";
+
 export interface CreateUserRequest {
   name: string;
   username: string;
@@ -20,6 +22,7 @@ export interface UpdateUserRequest {
 export interface UpdateProductRequest {
   name: string;
   images: string[];
+  status: ProductStatus;
   price: number;
   category: string;
   tags: string[];
@@ -27,6 +30,7 @@ export interface UpdateProductRequest {
   discount: number;
   description: string;
   thumbnail: string;
+  deletedImages: string[];
 }
 
 export interface CreateProductRequest {

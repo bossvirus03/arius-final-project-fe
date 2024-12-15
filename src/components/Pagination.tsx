@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 function Pagination({
   currentPage,
@@ -44,4 +44,4 @@ function Pagination({
   );
 }
 
-export default Pagination;
+export default memo(Pagination);

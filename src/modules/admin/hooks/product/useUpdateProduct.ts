@@ -4,9 +4,7 @@ import { onUpdateProduct } from "../../services/api";
 const useUpdateProduct = () => {
   const mutation = useMutation({
     mutationFn: onUpdateProduct,
-    onSuccess: () => {
-      // Invalidate the products query to refetch the updated list
-    },
+    onSuccess: () => {},
   });
 
   const { mutate, isPending, isError, isSuccess, error } = mutation;

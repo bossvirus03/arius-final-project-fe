@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import useQueryProducts from "../../../hooks/shop/useQueryProducts";
 import FilterBar from "../../../../../components/FilterBar";
 import ProductGrid from "../../../../../components/ProductGrid";
@@ -10,41 +10,38 @@ function Shop() {
   const [pageSize, setPageSize] = useState<number>(16);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const {
-    data: products,
-    isPending,
-    refetch,
-  } = useQueryProducts(sortField, sortOrder, currentPage, pageSize);
-
-  useEffect(() => {
-    refetch();
-  }, [sortField, sortOrder, pageSize, currentPage, refetch]);
+  const { data: products, isPending } = useQueryProducts(
+    sortField,
+    sortOrder,
+    currentPage,
+    pageSize
+  );
 
   const total = products?.meta.total || 0;
   const startIndex = (currentPage - 1) * pageSize + 1;
   const endIndex = Math.min(currentPage * pageSize, total);
 
-  const handleSetSortField = (newSortField: string) => {
+  const handleSetSortField = useCallback((newSortField: string) => {
     setSortField(newSortField);
     setCurrentPage(1);
-  };
+  }, []);
 
-  const handleSetSortOrder = (newSortOrder: string) => {
+  const handleSetSortOrder = useCallback((newSortOrder: string) => {
     setSortOrder(newSortOrder);
     setCurrentPage(1);
-  };
+  }, []);
 
-  const handleSetPageSize = (newPageSize: number) => {
+  const handleSetPageSize = useCallback((newPageSize: number) => {
     setPageSize(newPageSize);
     setCurrentPage(1);
-  };
+  }, []);
 
-  const handleSetCurrentPage = (newPage: number) => {
+  const handleSetCurrentPage = useCallback((newPage: number) => {
     setCurrentPage(newPage);
-  };
+  }, []);
 
   return (
-    <>
+    <div className="container">
       <FilterBar
         setPageSize={handleSetPageSize}
         setSortField={handleSetSortField}
@@ -63,11 +60,11 @@ function Shop() {
         <Pagination
           currentPage={currentPage}
           totalPages={Math.ceil(total / pageSize)}
-          onPageChange={(page) => handleSetCurrentPage(page)}
+          onPageChange={handleSetCurrentPage}
         />
       )}
-    </>
+    </div>
   );
 }
 
-export default Shop;
+export default React.memo(Shop);

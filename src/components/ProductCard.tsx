@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import ShareIcon from "./Icons/ShareIcon";
 import CompareIcon from "./Icons/CompareIcon";
 import FavoriteIcon from "./Icons/FavoriteIcon";
@@ -69,4 +69,4 @@ const ProductCard = ({ product }: { product: ProductRecord }) => {
   );
 };
 
-export default ProductCard;
+export default memo(ProductCard);

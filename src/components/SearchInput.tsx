@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, memo, useCallback } from "react";
 import InputIcon from "./Icons/InputIcon";
 import { useSearchProduct } from "../modules/main/modules/search/hooks/useSearchProduct";
 import debounce from "lodash/debounce";
@@ -17,12 +17,15 @@ function SearchInput({
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const { data, isPending } = useSearchProduct(searchTerm);
+  const { data, isPending } = useSearchProduct(searchTerm.trim() || "");
 
   // Debounce để giảm số lần gọi API
-  const debouncedSearch = debounce((query: string) => {
-    setSearchTerm(query);
-  }, 600);
+  const debouncedSearch = useCallback(
+    debounce((query: string) => {
+      setSearchTerm(query.trim()); // Loại bỏ khoảng trắng dư thừa
+    }, 800),
+    []
+  );
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const query = e.target.value;
@@ -35,6 +38,8 @@ function SearchInput({
       debouncedSearch.cancel();
     };
   }, []);
+
+  console.log("rerender");
 
   return (
     <div className="relative">
@@ -119,4 +124,4 @@ function SearchInput({
   );
 }
 
-export default SearchInput;
+export default memo(SearchInput);

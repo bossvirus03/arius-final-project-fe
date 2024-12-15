@@ -11,18 +11,10 @@ import {
 } from "antd";
 import { PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { RcFile } from "antd/es/upload";
-import type { UploadFile, UploadProps } from "antd";
+import type { UploadProps } from "antd";
 import { useUploadFile } from "../../../hooks/useUploadFile";
 import { useUploadMultifile } from "../../../hooks/useUploadMultifile";
 import useCreateProduct from "../hooks/product/useCreateProduct";
-const { Option } = Select;
-const getBase64 = (file: RcFile): Promise<string> =>
-  new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-  });
 
 interface ProductCreateModalProps {
   isModalOpen: boolean;
@@ -37,12 +29,15 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
 }) => {
   const [form] = Form.useForm();
   const [thumbnail, setThumbnail] = useState<RcFile | null>(null);
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList, setFileList] = useState<any[]>([]);
   const [tags, setTags] = useState<string[]>([]);
 
-  const { createProduct, isPending } = useCreateProduct();
-  const { mutateAsync: uploadThumbnail } = useUploadFile();
-  const { mutateAsync: uploadImages } = useUploadMultifile();
+  const { createProduct, isPending: isCreateProductPending } =
+    useCreateProduct();
+  const { mutateAsync: uploadThumbnail, isPending: isUploadThumbnailPending } =
+    useUploadFile();
+  const { mutateAsync: uploadImages, isPending: isUploadImagesPending } =
+    useUploadMultifile();
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -212,13 +207,23 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
         >
           <Upload
             listType="picture-card"
+            beforeUpload={() => false}
             fileList={fileList}
             onChange={handleChange}
           >
             {fileList.length >= 8 ? null : uploadButton}
           </Upload>
         </Form.Item>
-        <Button loading={isPending} type="primary" htmlType="submit" block>
+        <Button
+          loading={
+            isCreateProductPending ||
+            isUploadImagesPending ||
+            isUploadThumbnailPending
+          }
+          type="primary"
+          htmlType="submit"
+          block
+        >
           Create Product
         </Button>
       </Form>

@@ -1,15 +1,29 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Form, Input, InputNumber, Button, Upload, message } from "antd";
+import {
+  Modal,
+  Form,
+  Input,
+  InputNumber,
+  Button,
+  Upload,
+  message,
+  Select,
+} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { RcFile } from "antd/es/upload";
+import { useUploadFile } from "../../../hooks/useUploadFile";
+import { useUploadMultifile } from "../../../hooks/useUploadMultifile";
+import { UpdateProductRequest } from "../../../types/backend";
+import { ProductStatus } from "../../../types/backend.enum";
+import useUpdateProduct from "../hooks/product/useUpdateProduct";
+
+const { Option } = Select;
 
 interface ProductEditModalProps {
   isModalOpen: boolean;
   setIsModalOpen: (open: boolean) => void;
-  actionProduct: any; // The product being edited
+  actionProduct: any;
   setActionProduct: (product: any) => void;
   refetch: () => void;
-  updateProduct: any; // Hook or function to handle product update
 }
 
 const ProductEditModal: React.FC<ProductEditModalProps> = ({
@@ -18,19 +32,42 @@ const ProductEditModal: React.FC<ProductEditModalProps> = ({
   actionProduct,
   setActionProduct,
   refetch,
-  updateProduct,
 }) => {
   const [form] = Form.useForm();
-  const [thumbnail, setThumbnail] = useState<RcFile | null>(null);
+  const [thumbnail, setThumbnail] = useState<string | File | null>(null);
+  const [fileList, setFileList] = useState<any[]>([]);
+  const [deletedImages, setDeletedImages] = useState<string[]>([]);
+  const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
+  const { updateProduct, isPending: isUploadProductPending } =
+    useUpdateProduct();
+  const { mutate: uploadThumbnail, isPending: isUploadFilePending } =
+    useUploadFile();
+  const { mutate: uploadImages, isPending: isUploadMultiFilePending } =
+    useUploadMultifile();
 
   useEffect(() => {
     if (actionProduct) {
       form.setFieldsValue({
         name: actionProduct.name,
         price: actionProduct.price,
-        stock: actionProduct.stock,
+        quantity: actionProduct.quantity,
         category: actionProduct.category,
+        tags: actionProduct.tags,
+        description: actionProduct.description,
+        discount: actionProduct.discount,
+        status: actionProduct.status,
       });
+
+      setThumbnail(actionProduct.thumbnail);
+      setThumbnailPreview(actionProduct.thumbnail);
+      setFileList(
+        actionProduct.images.map((image: string) => ({
+          uid: image,
+          name: image,
+          status: "done",
+          url: image,
+        }))
+      );
     }
   }, [actionProduct, form]);
 
@@ -38,21 +75,94 @@ const ProductEditModal: React.FC<ProductEditModalProps> = ({
     setIsModalOpen(false);
     form.resetFields();
     setThumbnail(null);
+    setFileList([]);
+    setDeletedImages([]);
+    setThumbnailPreview(null);
     setActionProduct(null);
   };
 
-  const handleSubmit = async (values: any) => {
-    const formData = new FormData();
-    formData.append("name", values.name);
-    formData.append("price", values.price);
-    formData.append("stock", values.stock);
-    formData.append("category", values.category);
-    if (thumbnail) {
-      formData.append("thumbnail", thumbnail);
-    }
+  const handleDeleteImage = (file: any) => {
+    setFileList(fileList.filter((item) => item.uid !== file.uid));
+    setDeletedImages([...deletedImages, file.uid]);
+  };
 
+  const handleSubmit = async (values: any) => {
+    const newFiles = fileList.filter((file) => file.originFileObj); // New images
+    const existingImages = fileList
+      .filter((file) => !file.originFileObj)
+      .map((file) => file.url); // Existing URLs
+
+    // Upload thumbnail if it's a new file
+    if (thumbnail && thumbnail instanceof File) {
+      uploadThumbnail(
+        { file: thumbnail, folder: "product-thumbnails" },
+        {
+          onSuccess: (thumbnailUrl) => {
+            handleImagesUpload(values, thumbnailUrl, newFiles, existingImages);
+          },
+          onError: (error) => {
+            message.error(`Failed to upload thumbnail: ${error.message}`);
+          },
+        }
+      );
+    } else {
+      // Use existing thumbnail
+      handleImagesUpload(values, thumbnail as string, newFiles, existingImages);
+    }
+  };
+
+  const handleImagesUpload = (
+    values: any,
+    thumbnailUrl: string,
+    newFiles: any[],
+    existingImages: string[]
+  ) => {
+    if (newFiles.length > 0) {
+      uploadImages(
+        {
+          files: newFiles.map((file) => file.originFileObj),
+          folder: "product-images",
+        },
+        {
+          onSuccess: (uploadedUrls) => {
+            const updatedImages = [...uploadedUrls, ...existingImages];
+            submitProductUpdate(values, thumbnailUrl, updatedImages);
+          },
+          onError: (error) => {
+            message.error(`Failed to upload images: ${error.message}`);
+          },
+        }
+      );
+    } else {
+      submitProductUpdate(values, thumbnailUrl, existingImages);
+    }
+  };
+
+  const submitProductUpdate = async (
+    values: any,
+    thumbnailUrl: string,
+    images: string[]
+  ) => {
     try {
-      await updateProduct(actionProduct.id, formData);
+      const updateRequest: UpdateProductRequest = {
+        name: values.name,
+        price: parseFloat(values.price),
+        quantity: parseInt(values.quantity),
+        category: values.category,
+        description: values.description,
+        discount: parseFloat(values.discount),
+        status: values.status as ProductStatus,
+        thumbnail: thumbnailUrl,
+        images,
+        tags: values.tags,
+        deletedImages,
+      };
+
+      await updateProduct({
+        productId: actionProduct.id,
+        updates: updateRequest,
+      });
+
       message.success("Product updated successfully!");
       handleCancel();
       refetch();
@@ -61,9 +171,14 @@ const ProductEditModal: React.FC<ProductEditModalProps> = ({
     }
   };
 
-  const uploadProps = {
-    beforeUpload: (file: RcFile) => {
+  const handleChange = (info: any) => {
+    setFileList(info.fileList);
+  };
+
+  const uploadThumbnailProps = {
+    beforeUpload: (file: File) => {
       setThumbnail(file);
+      setThumbnailPreview(URL.createObjectURL(file));
       return false;
     },
   };
@@ -97,9 +212,9 @@ const ProductEditModal: React.FC<ProductEditModalProps> = ({
           <InputNumber style={{ width: "100%" }} min={0} />
         </Form.Item>
         <Form.Item
-          label="Stock"
-          name="stock"
-          rules={[{ required: true, message: "Please input the stock!" }]}
+          label="Quantity"
+          name="quantity"
+          rules={[{ required: true, message: "Please input the quantity!" }]}
         >
           <InputNumber style={{ width: "100%" }} min={0} />
         </Form.Item>
@@ -110,14 +225,86 @@ const ProductEditModal: React.FC<ProductEditModalProps> = ({
         >
           <Input />
         </Form.Item>
+        <Form.Item
+          label="Tags"
+          name="tags"
+          rules={[{ required: true, message: "Please input the tags!" }]}
+        >
+          <Select
+            mode="tags"
+            style={{ width: "100%" }}
+            placeholder="Add tags"
+            options={[
+              { label: "BLACK FRIDAY", value: "BLACK FRIDAY" },
+              { label: "PHONE", value: "PHONE" },
+            ]}
+          />
+        </Form.Item>
+        <Form.Item
+          label="Description"
+          name="description"
+          rules={[{ required: true, message: "Please input the description!" }]}
+        >
+          <Input.TextArea />
+        </Form.Item>
+        <Form.Item label="Discount" name="discount">
+          <InputNumber style={{ width: "100%" }} min={0} />
+        </Form.Item>
+        <Form.Item label="Status" name="status">
+          <Select>
+            <Option value={ProductStatus.AVAILABLE}>Active</Option>
+            <Option value={ProductStatus.OUT_OF_STOCK}>Inactive</Option>
+            <Option value={ProductStatus.UNAVAILABLE}>Draft</Option>
+          </Select>
+        </Form.Item>
         <Form.Item label="Thumbnail">
-          <Upload {...uploadProps} accept="image/*" maxCount={1}>
-            <Button icon={<UploadOutlined />}>Upload Thumbnail</Button>
+          <Upload
+            {...uploadThumbnailProps}
+            listType="picture-card"
+            showUploadList={false}
+          >
+            {thumbnailPreview ? (
+              <img
+                src={thumbnailPreview}
+                alt="thumbnail"
+                style={{ width: "80%" }}
+              />
+            ) : (
+              <div>
+                <UploadOutlined />
+                <div>Upload</div>
+              </div>
+            )}
           </Upload>
         </Form.Item>
-        <Button type="primary" htmlType="submit" block>
-          Update Product
-        </Button>
+        <Form.Item label="Images">
+          <Upload
+            listType="picture-card"
+            fileList={fileList}
+            beforeUpload={() => false} // Prevent automatic upload
+            onChange={handleChange}
+            onRemove={handleDeleteImage}
+          >
+            <div>
+              <UploadOutlined />
+              <div>Upload</div>
+            </div>
+          </Upload>
+        </Form.Item>
+        <Form.Item>
+          <Button
+            loading={
+              isUploadProductPending ||
+              isUploadFilePending ||
+              isUploadMultiFilePending
+            }
+            type="primary"
+            htmlType="submit"
+            block
+          >
+            Save Changes
+          </Button>
+        </Form.Item>
       </Form>
     </Modal>
   );

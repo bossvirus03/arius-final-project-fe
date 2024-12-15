@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Dropdown, Menu, MenuProps } from "antd";
 import { Link } from "react-router-dom";
 import Logo from "./Icons/Logo";
@@ -33,6 +33,8 @@ function Header() {
     if (!refreshToken) return;
     logoutUser({ token: refreshToken }, {});
   };
+
+  const handleClose = useCallback(() => setCartOverlayOpen(false), []);
 
   const items: MenuProps["items"] = [
     {
@@ -148,10 +150,7 @@ function Header() {
         </div>
       </div>
       {isCartOverlayOpen && (
-        <CartOverLay
-          cartItem={cartItem}
-          onClose={() => setCartOverlayOpen(false)}
-        />
+        <CartOverLay cartItem={cartItem} onClose={handleClose} />
       )}
     </div>
   );

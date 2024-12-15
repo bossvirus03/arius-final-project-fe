@@ -1,27 +1,52 @@
+import React from "react";
 import { createBrowserRouter, Outlet } from "react-router";
-import AppContainer from "../layouts/AppContainer";
-import AuthContainer from "../layouts/AuthContainer";
-import Login from "../modules/auth/pages/Login";
-import NotFound from "../modules/not-found/NotFound";
-import Register from "../modules/auth/pages/Register";
-import AdminLayout from "../modules/admin/layouts/AdminLayout";
-import User from "../modules/admin/pages/User";
-import Role from "../modules/admin/pages/Role";
-import Product from "../modules/admin/pages/Product";
-import Category from "../modules/admin/pages/Category";
-import Tags from "../modules/admin/pages/Tags";
-import Main from "../modules/main/pages/Main";
-import Shop from "../modules/main/modules/shop/pages/Shop";
-import ProductDetail from "../modules/main/modules/shop/pages/ProductDetail";
-import Cart from "../modules/main/modules/cart/pages/Cart";
-import About from "../modules/main/modules/about/pages/About";
-import Contact from "../modules/main/modules/contact/pages/Contact";
-import Checkout from "../modules/main/modules/checkout/pages/Checkout";
-import MainLayout from "../modules/main/layouts/MainLayout";
-import Search from "../modules/main/modules/search/pages/Search";
-import Order from "../modules/main/modules/order/pages/Order";
-import OrderDetail from "../modules/main/modules/order/pages/OrderDetail";
-import AdminOrderPage from "../modules/admin/pages/AdminOrderPage";
+const AppContainer = React.lazy(() => import("../layouts/AppContainer"));
+const AuthContainer = React.lazy(() => import("../layouts/AuthContainer"));
+const Login = React.lazy(() => import("../modules/auth/pages/Login"));
+const NotFound = React.lazy(() => import("../modules/not-found/NotFound"));
+const Register = React.lazy(() => import("../modules/auth/pages/Register"));
+const AdminLayout = React.lazy(
+  () => import("../modules/admin/layouts/AdminLayout")
+);
+const User = React.lazy(() => import("../modules/admin/pages/User"));
+const Role = React.lazy(() => import("../modules/admin/pages/Role"));
+const Product = React.lazy(() => import("../modules/admin/pages/Product"));
+const Category = React.lazy(() => import("../modules/admin/pages/Category"));
+const Tags = React.lazy(() => import("../modules/admin/pages/Tags"));
+const Main = React.lazy(() => import("../modules/main/pages/Main"));
+const Shop = React.lazy(
+  () => import("../modules/main/modules/shop/pages/Shop")
+);
+const ProductDetail = React.lazy(
+  () => import("../modules/main/modules/shop/pages/ProductDetail")
+);
+const Cart = React.lazy(
+  () => import("../modules/main/modules/cart/pages/Cart")
+);
+const About = React.lazy(
+  () => import("../modules/main/modules/about/pages/About")
+);
+const Contact = React.lazy(
+  () => import("../modules/main/modules/contact/pages/Contact")
+);
+const Checkout = React.lazy(
+  () => import("../modules/main/modules/checkout/pages/Checkout")
+);
+const MainLayout = React.lazy(
+  () => import("../modules/main/layouts/MainLayout")
+);
+const Search = React.lazy(
+  () => import("../modules/main/modules/search/pages/Search")
+);
+const Order = React.lazy(
+  () => import("../modules/main/modules/order/pages/Order")
+);
+const OrderDetail = React.lazy(
+  () => import("../modules/main/modules/order/pages/OrderDetail")
+);
+const AdminOrderPage = React.lazy(
+  () => import("../modules/admin/pages/AdminOrderPage")
+);
 
 export const browserRouters = createBrowserRouter([
   {

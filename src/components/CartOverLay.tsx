@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import CartCloseIcon from "./Icons/CartCloseIcon";
 import CloseIcon from "./Icons/CloseIcon";
 import { CartInfoProductResponse } from "../types/backend";
@@ -47,11 +47,11 @@ function CartOverLay({
       >
         {/* Your content remains unchanged */}
         <div className="p-7">
-          <div className="flex items-center justify-between p-6 border-b mb-5">
+          <div className="flex items-center justify-between p-6 mb-5 border-b">
             <h2 className="text-[24px] font-bold">Shopping Cart</h2>
             <button
               onClick={handleClose}
-              className="flex size-7 justify-center items-center hover:bg-gray-200 rounded-full"
+              className="flex items-center justify-center rounded-full size-7 hover:bg-gray-200"
             >
               <CartCloseIcon />
             </button>
@@ -61,18 +61,18 @@ function CartOverLay({
               cartItem.map((product) => (
                 <div
                   key={product.itemDetail.id}
-                  className="flex gap-8 py-5 justify-between items-center hover:bg-gray-100 rounded-md p-4"
+                  className="flex items-center justify-between gap-8 p-4 py-5 rounded-md hover:bg-gray-100"
                 >
                   <div className="size-[105px]">
                     <img
-                      className="w-full h-full object-contain"
+                      className="object-contain w-full h-full"
                       src={product.itemDetail.thumbnail}
                       alt=""
                     />
                   </div>
                   <div>
                     <h3 className="font-semibold">{product.itemDetail.name}</h3>
-                    <div className="flex justify-between items-center">
+                    <div className="flex items-center justify-between">
                       <p className="font-semibold">{product.quantity}</p>
                       <p className="font-light">×</p>
                       <p className="text-[12px] text-[#B88E2F] font-semibold">
@@ -102,7 +102,7 @@ function CartOverLay({
                 </div>
               ))}
           </div>
-          <div className="flex justify-around border-t p-7 absolute w-full bottom-0 left-0">
+          <div className="absolute bottom-0 left-0 flex justify-around w-full border-t p-7">
             <Link
               to={"/cart"}
               className="bg-white border border-black rounded-full h-7 w-[87px] font-semibold hover:bg-gray-100 flex justify-center items-center"
@@ -124,4 +124,4 @@ function CartOverLay({
   );
 }
 
-export default CartOverLay;
+export default memo(CartOverLay);

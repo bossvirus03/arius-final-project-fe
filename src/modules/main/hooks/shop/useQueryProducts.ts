@@ -8,7 +8,7 @@ const useQueryProducts = (
   size: number = 16
 ) => {
   const { isPending, isError, data, error, refetch } = useQuery({
-    queryKey: ["products", sortField, sortOrder],
+    queryKey: ["products", sortField, sortOrder, page, size],
     queryFn: () => onGetProducts(sortField, sortOrder, page, size),
   });
   return {

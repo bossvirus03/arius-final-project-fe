@@ -87,7 +87,7 @@ export const onUpdateProduct = ({
   updates: UpdateProductRequest;
 }) => {
   return api.put<ProductResponse>(
-    `${ApiUrls.admin.user.update}/${productId}`,
+    `${ApiUrls.admin.product.update}/${productId}`,
     updates
   );
 };
