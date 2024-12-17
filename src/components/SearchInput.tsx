@@ -27,17 +27,20 @@ function SearchInput({
     []
   );
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
-    debouncedSearch(query);
-    onChange && onChange(e);
-  };
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const query = e.target.value;
+      debouncedSearch(query);
+      onChange && onChange(e);
+    },
+    [debouncedSearch, onChange]
+  );
 
   useEffect(() => {
     return () => {
       debouncedSearch.cancel();
     };
-  }, []);
+  }, [debouncedSearch]);
 
   console.log("rerender");
 

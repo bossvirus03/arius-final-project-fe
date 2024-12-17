@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { onLoginApi } from "../services/api";
 import { jwtDecode } from "jwt-decode";
 import { setRefreshToken, setToken } from "./../../../../src/utils/token";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { ILoginResponse } from "../../../types/backend";
 import { TokenInfo } from "../interfaces/type";
 

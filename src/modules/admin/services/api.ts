@@ -8,7 +8,7 @@ import {
   GetOrderDetailResponse,
   IBackendEntity,
   OrderRecord,
-  ProductResponse,
+  ProductsResponse,
   RoleRecord,
   TagResponse,
   UpdateCategoryRequest,
@@ -17,6 +17,7 @@ import {
   UpdateTagRequest,
   UpdateUserRequest,
   UserRecord,
+  UsersResponse,
 } from "../../../types/backend";
 
 // USER
@@ -58,20 +59,36 @@ export const onExportUsers = () => {
   return api.get(`${ApiUrls.admin.user.export}`, { responseType: "blob" });
 };
 
-export const onGetUsers = async (sortField: string, sortOrder: string) => {
+export const onGetUsers = async ({
+  sortField,
+  sortOrder,
+  page,
+  size,
+}: {
+  sortField: string;
+  sortOrder: string;
+  page: number;
+  size: number;
+}): Promise<UsersResponse> => {
   const response = await api.get(
-    ApiUrls.admin.user.getAll + `?sort=${sortField},${sortOrder}`
+    ApiUrls.admin.user.getAll +
+      `?sort=${sortField},${sortOrder}&size=${size}&page=${page}`
   );
   return response?.data?.data;
 };
 
 // PRODUCT
-export const onGetProducts = async (
-  sortField: string,
-  sortOrder: string,
-  page: number,
-  size: number
-): Promise<ProductResponse> => {
+export const onAdminGetProducts = async ({
+  sortField,
+  sortOrder,
+  page,
+  size,
+}: {
+  sortField: string;
+  sortOrder: string;
+  page: number;
+  size: number;
+}): Promise<ProductsResponse> => {
   const data = await api.get(
     ApiUrls.admin.product.getAll +
       `?sort=${sortField},${sortOrder}&size=${size}&page=${page}`
@@ -86,18 +103,18 @@ export const onUpdateProduct = ({
   productId: string;
   updates: UpdateProductRequest;
 }) => {
-  return api.put<ProductResponse>(
+  return api.put<ProductsResponse>(
     `${ApiUrls.admin.product.update}/${productId}`,
     updates
   );
 };
 
 export const onCreateProduct = ({ body }: { body: CreateProductRequest }) => {
-  return api.post<ProductResponse>(`${ApiUrls.admin.product.create}`, body);
+  return api.post<ProductsResponse>(`${ApiUrls.admin.product.create}`, body);
 };
 
 export const onDeleteProduct = (productId: string) => {
-  return api.delete<ProductResponse>(
+  return api.delete<ProductsResponse>(
     `${ApiUrls.admin.product.delete}/${productId}`
   );
 };

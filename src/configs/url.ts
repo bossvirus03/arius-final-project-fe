@@ -59,5 +59,7 @@ export const ApiUrls = {
     getOrderDetail: "/order",
     uploadMultiFile: "/file/uploads",
     uploadFile: "/file/upload",
+    getRandomTagWithProducts: "/product/home/tags",
+    updateProductQuantityInCart: "/cart/product/{productId}/quantity",
   },
 };

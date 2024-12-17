@@ -7,8 +7,8 @@ import CallSupportIcon from "./Icons/CallSupportIcon";
 function Features() {
   return (
     <div className="bg-[#FAF3EA] py-[100px] px-[53px] flex justify-center">
-      <ul className="container grid grid-cols-1 gap-6 px-4 py-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4  justify-items-center">
-        <li className="flex items-center justify-center gap-4">
+      <ul className="container grid justify-between grid-cols-1 gap-6 px-4 py-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center">
+        <li className="flex items-center justify-between gap-4">
           <CupIcon />
           <div>
             <h2 className="text-[25px]">High Quality</h2>
@@ -17,21 +17,21 @@ function Features() {
             </p>
           </div>
         </li>
-        <li className="flex items-center justify-center gap-4">
+        <li className="flex items-center justify-between gap-4">
           <TickCheckIcon />
           <div>
             <h2 className="text-[25px]">Warranty Protection</h2>
             <p className="text-[#898989] text-[20px]">Over 2 years</p>
           </div>
         </li>
-        <li className="flex items-center justify-center gap-4">
+        <li className="flex items-center justify-between gap-4">
           <ShipingIcon />
           <div>
             <h2 className="text-[25px]">Free Shipping</h2>
             <p className="text-[#898989] text-[20px]">Order over 150 $</p>
           </div>
         </li>
-        <li className="flex items-center justify-center gap-4">
+        <li className="flex items-center justify-between gap-4">
           <CallSupportIcon />
           <div>
             <h2 className="text-[25px]">24 / 7 Support</h2>

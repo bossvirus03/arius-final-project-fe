@@ -12,6 +12,7 @@ export type CartStore = {
   ) => void;
   addToCart: (product: ProductRecord, quantity: number) => void;
   removeItem: (productId: string) => void;
+  updateQuantity: (productId: string, quantity: number) => void;
 };
 export const useCartStore = create<CartStore>()(
   devtools((set, get) => ({
@@ -41,37 +42,69 @@ export const useCartStore = create<CartStore>()(
         updatedCart.push({ quantity, itemDetail: product });
       }
 
-      const totalItem = updatedCart.reduce(
-        (sum, item) => sum + item.quantity,
-        0
-      );
+      // const totalItem = updatedCart.reduce(
+      //   (sum, item) => sum + item.quantity,
+      //   0
+      // );
       const totalPrice = updatedCart.reduce(
         (sum, item) => sum + item.itemDetail.price * item.quantity,
         0
       );
 
-      set({ cartItem: updatedCart, totalItem, totalPrice });
+      set({ cartItem: updatedCart, totalItem: updatedCart.length, totalPrice });
     },
+
     removeItem: (productId: string) => {
       set((state) => {
         const updatedItems = state.cartItem.filter(
           (item) => item.itemDetail.id !== productId
         );
-        const totalItem = updatedItems.length;
-        const itemCount = updatedItems.reduce(
-          (total, item) => total + item.itemDetail.quantity,
-          0
-        );
-
+        // const totalItem = updatedItems.reduce(
+        //   (sum, item) => sum + item.quantity,
+        //   0
+        // );
         const totalPrice = updatedItems.reduce(
           (sum, item) => sum + item.itemDetail.price * item.quantity,
           0
         );
         return {
-          items: updatedItems,
-          totalItem: totalItem,
-          itemCount,
+          cartItem: updatedItems,
+          totalItem: updatedItems.length,
           totalPrice,
+        };
+      });
+    },
+
+    updateQuantity: (productId: string, newQuantity: number) => {
+      set((state) => {
+        // Update the quantity of the product in the cart
+        const updatedCart = state.cartItem.map((item) => {
+          if (item.itemDetail.id === productId) {
+            return { ...item, quantity: newQuantity }; // Update quantity for the matching product
+          }
+          return item;
+        });
+
+        // Recalculate total items (sum of all product quantities)
+        const totalItem = updatedCart.reduce(
+          (sum, item) => sum + (item.quantity || 0),
+          0
+        );
+
+        // Recalculate total price (sum of all product prices * quantities)
+        const totalPrice = updatedCart.reduce(
+          (sum, item) =>
+            sum + (item.itemDetail.price || 0) * (item.quantity || 0),
+          0
+        );
+
+        // Return updated state
+
+        console.log("???????>>>", totalItem, updatedCart);
+        return {
+          cartItem: updatedCart, // Update cart items
+          totalItem: updatedCart.length, // Total number of items
+          totalPrice, // Total price
         };
       });
     },

@@ -4,15 +4,16 @@ import CompareIcon from "./Icons/CompareIcon";
 import FavoriteIcon from "./Icons/FavoriteIcon";
 import { ProductRecord } from "../types/backend";
 import { Link } from "react-router";
-import useAddProductToCart from "../modules/main/hooks/shop/useAddproductToCart";
+import useAddProductToCart from "../modules/main/modules/cart/hooks/useAddproductToCart";
 import { message } from "antd";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const ProductCard = ({ product }: { product: ProductRecord }) => {
   const { mutate: addProduct, isPending: isAdding } = useAddProductToCart();
   return (
     <div className="overflow-hidden transition-all duration-300 border rounded-lg shadow-md h-[446px] w-[285px] self-center relative hover:bg-gray-100 hover:shadow-lg">
       <div className="relative w-full h-64 group">
-        <img
+        <LazyLoadImage
           src={product.thumbnail}
           alt={product.name}
           className="object-cover w-full h-full group-hover:shadow-lg"

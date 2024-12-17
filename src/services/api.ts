@@ -1,6 +1,7 @@
 import { ApiUrls } from "../configs/url";
 import {
   CartInfoResponse,
+  GetRandomTagWithProductsResponse,
   OrderRecord,
   SearchProductResponse,
   UserRecord,
@@ -30,6 +31,19 @@ export const onSearchProduct = async ({
 export const onGetme = async (): Promise<UserRecord> => {
   const userData = await api.get(ApiUrls.user.getMe);
   return userData?.data?.data;
+};
+
+export const onGetRandomTagWithProducts = async ({
+  tagLimit,
+  productLimit,
+}: {
+  tagLimit: number;
+  productLimit: number;
+}): Promise<GetRandomTagWithProductsResponse> => {
+  const response = await api.get(ApiUrls.user.getRandomTagWithProducts, {
+    params: { tagLimit, productLimit },
+  });
+  return response?.data?.data;
 };
 
 export const onCreateOrderFromCart = async ({

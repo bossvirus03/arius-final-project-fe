@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
+import debounce from "lodash/debounce";
 import BinIcon from "../../../../../components/Icons/BinIcon";
 import { useCartStore } from "../../../../../store/cart.store";
-import useRemoveProductFromCart from "../../../hooks/shop/useDeleteProductToCart";
+import useRemoveProductFromCart from "../hooks/useDeleteProductFromCart";
+import useUpdateProductQuantityInCart from "../hooks/useUpdateProductQuantityInCart";
 import { useCheckoutStore } from "../../../../../store/checkout.store";
 import { useNavigate } from "react-router";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function Cart() {
   const { cartItem } = useCartStore();
   const { setCheckoutItem } = useCheckoutStore();
   const navigate = useNavigate();
   const { mutate: removeProductFromCart } = useRemoveProductFromCart();
+  const { mutate: updateProductQuantity } = useUpdateProductQuantityInCart();
 
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
@@ -63,13 +67,27 @@ function Cart() {
     );
 
     setCheckoutItem(selectedItemsDetails, itemCount, totalPrice);
-    // Navigate to checkout page
     navigate("/checkout");
   };
+
+  // Debounced function to update the product quantity in the cart
+  const debouncedUpdateQuantity = useCallback(
+    debounce((productId: string, quantity: number) => {
+      updateProductQuantity({ productId, quantity });
+    }, 500), // 500ms debounce delay
+    []
+  );
+
+  const handleQuantityChange = (productId: string, newQuantity: number) => {
+    if (newQuantity > 0) {
+      useCartStore.getState().updateQuantity(productId, newQuantity); // Update local state
+      debouncedUpdateQuantity(productId, newQuantity); // Trigger debounced API call
+    }
+  };
+
   return (
     <>
       <div className="container flex flex-col gap-8 p-8 lg:flex-row lg:justify-between">
-        {/* Cart Items */}
         <div className="flex-1">
           <table className="w-full text-left border-collapse">
             <thead className="bg-beige-100 bg-[#F9F1E7]">
@@ -101,7 +119,7 @@ function Cart() {
                     />
                   </td>
                   <td className="flex items-center gap-4 px-6 py-4">
-                    <img
+                    <LazyLoadImage
                       src={item.itemDetail.thumbnail}
                       alt={item.itemDetail.name}
                       className="w-16 h-16 rounded"
@@ -119,6 +137,10 @@ function Cart() {
                       type="number"
                       min="1"
                       value={item.quantity}
+                      onChange={(e) => {
+                        const newQuantity = parseInt(e.target.value, 10);
+                        handleQuantityChange(item.itemDetail.id, newQuantity);
+                      }}
                       className="w-12 text-center border rounded"
                     />
                   </td>

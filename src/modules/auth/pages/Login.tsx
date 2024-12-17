@@ -1,6 +1,7 @@
 import { Button, Form, FormProps, Input, message } from "antd";
 import GoogleColorIcon from "../../../components/Icons/GoogleColorIcon";
 import useLogin, { LoginCredentials } from "../hooks/useLogin";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function Login() {
   const { loginUser, isPending } = useLogin();
@@ -26,7 +27,7 @@ function Login() {
       <div className="flex w-full max-w-4xl overflow-hidden bg-white rounded-lg shadow-lg">
         {/* Left Section (Image or Illustration) */}
         <div className="flex items-center justify-center w-1/2 bg-blue-500">
-          <img
+          <LazyLoadImage
             src="https://images.pexels.com/photos/3612182/pexels-photo-3612182.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
             alt="Login Illustration"
             className="object-cover max-h-full"

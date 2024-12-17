@@ -8,7 +8,6 @@ import {
   ImportOutlined,
   PlusOutlined,
   QuestionCircleOutlined,
-  UploadOutlined,
 } from "@ant-design/icons";
 import UserEditModal from "../components/UserEditModal";
 import useQueryUsers from "../hooks/user/useQueryUsers";
@@ -19,11 +18,13 @@ import useImportUsers from "../hooks/user/useImportUsers";
 import useExportUsers from "../hooks/user/useExportUsers";
 
 function User() {
-  const [sortField, setSortField] = useState<string>("name");
+  const [sortField, setSortField] = useState<string>("lastName");
   const [sortOrder, setSortOrder] = useState<string>("desc");
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [actionUser, setActionUser] = useState<UserRecord | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10); // Default page size
 
   const { data, isLoading, refetch } = useQueryUsers(sortField, sortOrder);
   const { deleteUser } = useDeleteUser();
@@ -31,10 +32,14 @@ function User() {
   const { exportUsers, isExporting } = useExportUsers();
 
   const handleTableChange: TableProps<UserRecord>["onChange"] = (
-    _pagination,
+    pagination,
     _filters,
     sorter
   ) => {
+    if (pagination) {
+      setCurrentPage(pagination.current || 1); // Update current page
+      setPageSize(pagination.pageSize || 10); // Update page size
+    }
     if (sorter && "field" in sorter && "order" in sorter) {
       setSortField(sorter.field as string);
       setSortOrder(sorter.order === "ascend" ? "asc" : "desc");
@@ -194,9 +199,15 @@ function User() {
 
       <Table<UserRecord>
         columns={columns}
-        dataSource={data || []}
+        dataSource={data?.result || []}
         onChange={handleTableChange}
         loading={isLoading}
+        pagination={{
+          current: currentPage,
+          pageSize: pageSize,
+          total: data?.meta.total || 0,
+          showSizeChanger: true,
+        }}
       />
 
       {actionUser && (

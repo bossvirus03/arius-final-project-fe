@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { getToken } from "./../../src/utils/token";
 
 function AuthHOC(WrappedComponent: any) {

@@ -3,6 +3,7 @@ import { useSearchProduct } from "../hooks/useSearchProduct";
 import { useLocation } from "react-router";
 import ProductGrid from "../../../../../components/ProductGrid";
 import imgSearchNotFound from "./../../../../../assets/images/searchnotfound.png";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 function Search() {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -28,7 +29,7 @@ function Search() {
           ) : (
             <div className="md:h-[500px] flex justify-center items-center flex-col">
               <div className="size-[150px]">
-                <img
+                <LazyLoadImage
                   className="size-full"
                   src={imgSearchNotFound}
                   alt="search not found"

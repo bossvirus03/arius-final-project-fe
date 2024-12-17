@@ -41,7 +41,7 @@ function App() {
   return (
     <>
       {isLoading ? (
-        <div className="preloader">
+        <div className="h-[100vh] w-full flex justify-center items-center flex-col">
           <div role="status">
             <svg
               aria-hidden="true"
@@ -59,9 +59,9 @@ function App() {
                 fill="currentFill"
               />
             </svg>
-            <span className="font-semibold sr-only ">Loading...</span>
+            <p className="sr-only ">Loading...</p>
           </div>
-          <p>Loading...</p>
+          <p className="font-semibold">Loading...</p>
         </div>
       ) : (
         <QueryClientProvider client={queryClient}>

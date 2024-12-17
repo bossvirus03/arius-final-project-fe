@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router";
 import { jwtDecode } from "jwt-decode";
 import { getToken, removeToken } from "../../src/utils/token";
 import { TokenInfo } from "../modules/auth/interfaces/type";

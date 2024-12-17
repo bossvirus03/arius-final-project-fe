@@ -1,43 +1,64 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Button, Popconfirm, Space, Table, Tag, Upload, message } from "antd";
 import type { TableProps } from "antd";
 import {
   DeleteOutlined,
   EditOutlined,
-  ExportOutlined,
   ImportOutlined,
   PlusOutlined,
   QuestionCircleOutlined,
-  UploadOutlined,
 } from "@ant-design/icons";
-import { ProductRecord, ProductResponse } from "../../../types/backend";
+import { ProductRecord } from "../../../types/backend";
 import useQueryProducts from "../hooks/product/useQueryProducts";
 import useDeleteProduct from "../hooks/product/useDeleteProduct";
 import useImportProducts from "../hooks/product/useImportProducts";
 import ProductCreateModal from "../components/ProductCreateModal";
 import ProductEditModal from "../components/ProductEditModal";
-import useCreateProduct from "../hooks/product/useCreateProduct";
-import useUpdateProduct from "../hooks/product/useUpdateProduct";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function Product() {
   const [sortField, setSortField] = useState<string>("name");
   const [sortOrder, setSortOrder] = useState<string>("desc");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10); // Default page size
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [actionProduct, setActionProduct] = useState<ProductRecord | null>(
     null
   );
 
-  const { data, isPending, refetch } = useQueryProducts(sortField, sortOrder);
+  const handlesetIsEditModalOpen = useCallback(
+    (value: boolean) => setIsEditModalOpen(value),
+    []
+  );
+  const HandleSetIsCreateModalOpen = useCallback(
+    (value: boolean) => setIsCreateModalOpen(value),
+    []
+  );
+
+  const handleSetActionProduct = useCallback(
+    (value: ProductRecord | null) => setActionProduct(value),
+    []
+  );
+
+  const { data, isPending, refetch } = useQueryProducts({
+    sortField,
+    sortOrder,
+    page: currentPage,
+    size: pageSize,
+  });
   const { deleteProduct } = useDeleteProduct();
   const { importProducts, isImporting } = useImportProducts();
-  const { updateProduct } = useUpdateProduct();
 
   const handleTableChange: TableProps<ProductRecord>["onChange"] = (
-    _pagination,
+    pagination,
     _filters,
     sorter
   ) => {
+    if (pagination) {
+      setCurrentPage(pagination.current || 1); // Update current page
+      setPageSize(pagination.pageSize || 10); // Update page size
+    }
     if (sorter && "field" in sorter && "order" in sorter) {
       setSortField(sorter.field as string);
       setSortOrder(sorter.order === "ascend" ? "asc" : "desc");
@@ -65,7 +86,7 @@ function Product() {
       dataIndex: "thumbnail",
       key: "thumbnail",
       render: (thumbnail: string) => (
-        <img
+        <LazyLoadImage
           src={thumbnail}
           alt="Thumbnail"
           style={{ width: 50, height: 50, objectFit: "cover" }}
@@ -178,7 +199,7 @@ function Product() {
           </Button>
           <ProductCreateModal
             isModalOpen={isCreateModalOpen}
-            setIsModalOpen={setIsCreateModalOpen}
+            setIsModalOpen={HandleSetIsCreateModalOpen}
             refetch={refetch}
           />
         </div>
@@ -189,17 +210,21 @@ function Product() {
         dataSource={data?.result || []}
         onChange={handleTableChange}
         loading={isPending}
+        pagination={{
+          current: currentPage,
+          pageSize: pageSize,
+          total: data?.meta.total || 0,
+          showSizeChanger: true,
+        }}
       />
 
-      {/* Render the Edit Modal outside the table */}
       {actionProduct && (
         <ProductEditModal
           actionProduct={actionProduct}
-          setActionProduct={setActionProduct}
+          setActionProduct={handleSetActionProduct}
           isModalOpen={isEditModalOpen}
-          setIsModalOpen={setIsEditModalOpen}
+          setIsModalOpen={handlesetIsEditModalOpen}
           refetch={refetch}
-          updateProduct={updateProduct}
         />
       )}
     </div>

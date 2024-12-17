@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Dropdown, Menu, MenuProps } from "antd";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import Logo from "./Icons/Logo";
 import AccountIcon from "./Icons/AccountIcon";
 import HeartIcon from "./Icons/HeartIcon";
@@ -22,6 +22,7 @@ function Header() {
 
   const { logoutUser, isPending } = useLogout();
   const [searchValue, setSearchValue] = useState<string>("");
+
   useEffect(() => {
     if (data) {
       setCartInfo(data.items, data.itemCount, data.totalPrice);
@@ -84,15 +85,24 @@ function Header() {
     },
   ];
 
+  const handleSetFocus = useCallback((value: boolean) => {
+    setIsFocused(value);
+  }, []);
+
+  const handleInputSearchChange = useCallback((e: any) => {
+    setIsFocused(true);
+    setSearchValue(e.target.value);
+  }, []);
+
   return (
     <div className="h-[100px] w-full fixed top-0 z-10 bg-white flex justify-center items-center shadow-md">
-      <div className="container flex items-center justify-between">
-        <div className="text-2xl font-semibold text-gray-700">
+      <div className="container flex flex-wrap items-center justify-between lg:flex-nowrap">
+        <div className="flex-shrink-0 text-2xl font-semibold text-gray-700">
           <Link to="/">
             <Logo />
           </Link>
         </div>
-        <ul className="flex font-semibold gap-[75px]">
+        <ul className="flex font-semibold gap-[75px] hidden lg:flex">
           <li>
             <Link className="relative transition-all group" to="/">
               Home
@@ -119,15 +129,11 @@ function Header() {
           </li>
         </ul>
         <div className="flex items-center gap-8">
-          {/* Conditionally render the expanding search input */}
           <SearchInput
             value={searchValue}
             isFocused={isFocused}
-            setIsFocused={setIsFocused}
-            onChange={(e) => {
-              setIsFocused(true);
-              setSearchValue(e.target.value);
-            }}
+            setIsFocused={handleSetFocus}
+            onChange={handleInputSearchChange}
           />
 
           <HeartIcon />
@@ -147,6 +153,11 @@ function Header() {
               <AccountIcon />
             </a>
           </Dropdown>
+        </div>
+        <div className="lg:hidden">
+          <button className="text-2xl text-gray-700">
+            <span className="material-icons">menu</span>
+          </button>
         </div>
       </div>
       {isCartOverlayOpen && (

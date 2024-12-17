@@ -2,9 +2,10 @@ import React, { memo, useEffect, useState } from "react";
 import CartCloseIcon from "./Icons/CartCloseIcon";
 import CloseIcon from "./Icons/CloseIcon";
 import { CartInfoProductResponse } from "../types/backend";
-import useRemoveProductFromCart from "../modules/main/hooks/shop/useDeleteProductToCart";
+import useRemoveProductFromCart from "../modules/main/modules/cart/hooks/useDeleteProductFromCart";
 import { message } from "antd";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function CartOverLay({
   cartItem,
@@ -64,7 +65,7 @@ function CartOverLay({
                   className="flex items-center justify-between gap-8 p-4 py-5 rounded-md hover:bg-gray-100"
                 >
                   <div className="size-[105px]">
-                    <img
+                    <LazyLoadImage
                       className="object-contain w-full h-full"
                       src={product.itemDetail.thumbnail}
                       alt=""

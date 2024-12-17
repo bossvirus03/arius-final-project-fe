@@ -1,6 +1,7 @@
 import React from "react";
 import { useGetOrders } from "../hooks/useGetOrders";
 import { Tag } from "antd";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function Order() {
   const { data: orders, isPending, isError, error, isFetched } = useGetOrders();
@@ -57,7 +58,7 @@ function Order() {
                             window.location.href = `/order/${order.orderId}`;
                           }}
                         >
-                          <img
+                          <LazyLoadImage
                             src={detail.product.thumbnail}
                             alt={detail.product.name}
                             className="object-cover w-16 h-16 rounded-md"

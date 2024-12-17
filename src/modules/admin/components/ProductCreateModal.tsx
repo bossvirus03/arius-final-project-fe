@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import {
   Modal,
   Form,
@@ -27,6 +27,7 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
   setIsModalOpen,
   refetch,
 }) => {
+  console.log("rerender");
   const [form] = Form.useForm();
   const [thumbnail, setThumbnail] = useState<RcFile | null>(null);
   const [fileList, setFileList] = useState<any[]>([]);
@@ -231,4 +232,4 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
   );
 };
 
-export default ProductCreateModal;
+export default memo(ProductCreateModal);

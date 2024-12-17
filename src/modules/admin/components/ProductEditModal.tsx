@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import {
   Modal,
   Form,
@@ -15,6 +15,7 @@ import { useUploadMultifile } from "../../../hooks/useUploadMultifile";
 import { UpdateProductRequest } from "../../../types/backend";
 import { ProductStatus } from "../../../types/backend.enum";
 import useUpdateProduct from "../hooks/product/useUpdateProduct";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const { Option } = Select;
 
@@ -33,6 +34,7 @@ const ProductEditModal: React.FC<ProductEditModalProps> = ({
   setActionProduct,
   refetch,
 }) => {
+  console.log("rerender");
   const [form] = Form.useForm();
   const [thumbnail, setThumbnail] = useState<string | File | null>(null);
   const [fileList, setFileList] = useState<any[]>([]);
@@ -252,9 +254,9 @@ const ProductEditModal: React.FC<ProductEditModalProps> = ({
         </Form.Item>
         <Form.Item label="Status" name="status">
           <Select>
-            <Option value={ProductStatus.AVAILABLE}>Active</Option>
-            <Option value={ProductStatus.OUT_OF_STOCK}>Inactive</Option>
-            <Option value={ProductStatus.UNAVAILABLE}>Draft</Option>
+            <Option value={ProductStatus.AVAILABLE}>AVAILABLE</Option>
+            <Option value={ProductStatus.OUT_OF_STOCK}>OUT_OF_STOCK</Option>
+            <Option value={ProductStatus.UNAVAILABLE}>UNAVAILABLE</Option>
           </Select>
         </Form.Item>
         <Form.Item label="Thumbnail">
@@ -264,7 +266,7 @@ const ProductEditModal: React.FC<ProductEditModalProps> = ({
             showUploadList={false}
           >
             {thumbnailPreview ? (
-              <img
+              <LazyLoadImage
                 src={thumbnailPreview}
                 alt="thumbnail"
                 style={{ width: "80%" }}
@@ -310,4 +312,4 @@ const ProductEditModal: React.FC<ProductEditModalProps> = ({
   );
 };
 
-export default ProductEditModal;
+export default memo(ProductEditModal);

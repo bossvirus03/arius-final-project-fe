@@ -100,9 +100,14 @@ export interface MetaPagination {
   total: number;
 }
 
-export interface ProductResponse {
+export interface ProductsResponse {
   meta: MetaPagination;
   result: ProductRecord[];
+}
+
+export interface UsersResponse {
+  meta: MetaPagination;
+  result: UserRecord[];
 }
 
 export interface UserRecord {
@@ -186,4 +191,8 @@ export interface GetOrderDetailResponse {
 export interface IBackendEntity<T> {
   code: number;
   data: T;
+}
+
+export interface GetRandomTagWithProductsResponse {
+  [key: string]: ProductRecord[];
 }

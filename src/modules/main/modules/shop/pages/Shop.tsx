@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from "react";
-import useQueryProducts from "../../../hooks/shop/useQueryProducts";
+import useQueryProducts from "../../../hooks/useQueryProducts";
 import FilterBar from "../../../../../components/FilterBar";
 import ProductGrid from "../../../../../components/ProductGrid";
 import Pagination from "../../../../../components/Pagination";
+import ProductGridLoading from "../../../../admin/components/loading/ProductGridLoading";
 
 function Shop() {
   const [sortField, setSortField] = useState<string>("");
@@ -52,7 +53,9 @@ function Shop() {
         pageSize={pageSize}
       />
       {isPending ? (
-        <>Loading...</>
+        <>
+          <ProductGridLoading items={8} />
+        </>
       ) : (
         <ProductGrid products={products?.result} />
       )}

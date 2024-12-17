@@ -1,11 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
-import { onRemoveProductFromCart } from "../../services/api";
-import { CartStore, useCartStore } from "../../../../store/cart.store";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { CartStore, useCartStore } from "../../../../../store/cart.store";
+import { onAddProductToCart } from "../services/api";
 
-const useRemoveProductFromCart = () => {
+const useAddProductToCart = () => {
   const { setCartInfo }: CartStore = useCartStore();
   const muatation = useMutation({
-    mutationFn: onRemoveProductFromCart,
+    mutationFn: onAddProductToCart,
     onSuccess: (newCartItem) => {
       setCartInfo(
         newCartItem.items,
@@ -24,4 +24,4 @@ const useRemoveProductFromCart = () => {
   return { data, mutate, isPending, isError, error };
 };
 
-export default useRemoveProductFromCart;
+export default useAddProductToCart;

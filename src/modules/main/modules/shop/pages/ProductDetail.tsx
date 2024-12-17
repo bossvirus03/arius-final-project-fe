@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 import useQueryProductDetail from "../hooks/useQueryProductDetail";
 import Button from "../../../../../components/Button";
-import useAddProductToCart from "../../../hooks/shop/useAddproductToCart";
+import useAddProductToCart from "../../cart/hooks/useAddproductToCart";
 import { message } from "antd";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 function ProductDetail() {
   const { id } = useParams();
@@ -32,14 +33,14 @@ function ProductDetail() {
   if (error) return <div>Error loading product details.</div>;
 
   return (
-    <div className="container  pt-8">
+    <div className="container pt-8">
       {product && (
         <div className="flex gap-[82px] mx-auto ">
           {/* Image Section */}
           <div className="flex items-start">
             <div className="flex flex-col gap-4">
               {product.images.map((img, index) => (
-                <img
+                <LazyLoadImage
                   key={index}
                   src={img}
                   alt={`Thumbnail ${index}`}
@@ -50,7 +51,7 @@ function ProductDetail() {
             </div>
 
             <div className="relative w-[500px] h-[500px]">
-              <img
+              <LazyLoadImage
                 src={currentImage || ""}
                 alt={product.name}
                 className={`object-cover w-full h-full transition-opacity duration-300 ease-in-out ${
@@ -63,7 +64,7 @@ function ProductDetail() {
           {/* Product Info Section */}
           <div>
             <h1 className="text-2xl font-bold">{product.name}</h1>
-            <p className="text-xl text-gray-700 my-2">
+            <p className="my-2 text-xl text-gray-700">
               Rs. {product.price.toLocaleString()}
             </p>
             <p className="text-gray-600">{product.description}</p>
@@ -87,7 +88,7 @@ function ProductDetail() {
 
             <div className="flex gap-4 mt-6 ">
               <Button
-                className="border bg-white border-black hover:bg-gray-100"
+                className="bg-white border border-black hover:bg-gray-100"
                 disabled={isAdding}
                 onClick={() =>
                   addProduct(
@@ -102,7 +103,7 @@ function ProductDetail() {
               >
                 {isAdding ? "Adding..." : "Add to Cart"}
               </Button>
-              <Button className="border bg-white border-black hover:bg-gray-100">
+              <Button className="bg-white border border-black hover:bg-gray-100">
                 Compare
               </Button>
             </div>

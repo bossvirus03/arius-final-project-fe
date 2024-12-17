@@ -1,9 +1,10 @@
 import React from "react";
-import { useParams } from "react-router-dom"; // Nếu bạn dùng react-router
+import { useParams } from "react-router"; // Nếu bạn dùng react-router
 import { Spin, Tag, Divider } from "antd";
 import { useGetOrderDetail } from "../hooks/useGetOrderDetail";
 import LeftArrow from "../../../../../components/Icons/LeftArrowIcon";
 import ProgressTracker from "../../../../../components/ProgressTracker";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const OrderDetail = () => {
   const { id } = useParams();
@@ -92,7 +93,7 @@ const OrderDetail = () => {
               className="flex items-start gap-4 pb-4 border-b"
             >
               {/* Product Image */}
-              <img
+              <LazyLoadImage
                 src={detail.product.thumbnail}
                 alt={detail.product.name}
                 className="object-cover w-20 h-20 rounded-lg"
