@@ -137,6 +137,12 @@ export interface ILoginResponse {
     refresh_token: string;
   };
 }
+export interface IRegisterResponse {
+  data: {
+    access_token: string;
+    refresh_token: string;
+  };
+}
 
 export interface CartInfoResponse {
   itemCount: number;

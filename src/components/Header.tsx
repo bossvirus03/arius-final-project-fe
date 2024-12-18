@@ -16,7 +16,6 @@ import SearchInput from "./SearchInput";
 import Dropdown from "./Dropdown";
 import OrderIcon from "./Icons/OrderIcon";
 import CicleHelpIcon from "./Icons/CicleHelpIcon";
-import PhoneIcon from "./Icons/PhoneIcon";
 import PhoneOutlineIcon from "./Icons/PhoneOutlineIcon";
 
 function Header() {
@@ -47,7 +46,7 @@ function Header() {
       label: (
         <Link
           className="w-[150px] flex items-center gap-3 font-semibold after:w-100%"
-          to={"/profile"}
+          to={"/user/account/profile"}
           style={{ width: "150px" }}
         >
           <PersonIcon />
@@ -169,7 +168,7 @@ function Header() {
             </button>
           </div>
           <Dropdown menu={{ items }} placement="bottom" trigger={["click"]}>
-            <button>
+            <button className="fill-black hover:fill-gray-500">
               <AccountIcon />
             </button>
           </Dropdown>

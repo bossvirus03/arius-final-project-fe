@@ -72,6 +72,16 @@ const ProductEditModal: React.FC<ProductEditModalProps> = ({
     }
   }, [actionProduct, form]);
 
+  useEffect(() => {
+    return () => {
+      fileList.forEach((file) => {
+        if (file.preview) {
+          URL.revokeObjectURL(file.preview);
+        }
+      });
+    };
+  }, [fileList]);
+
   const handleCancel = () => {
     setIsModalOpen(false);
     form.resetFields();
@@ -173,7 +183,17 @@ const ProductEditModal: React.FC<ProductEditModalProps> = ({
   };
 
   const handleChange = (info: any) => {
-    setFileList(info.fileList);
+    // Map qua các file và xử lý preview
+    const newFileList = info.fileList.map((file: any) => {
+      if (file.originFileObj) {
+        return {
+          ...file,
+          preview: URL.createObjectURL(file.originFileObj),
+        };
+      }
+      return file;
+    });
+    setFileList(newFileList);
   };
 
   const uploadThumbnailProps = {
@@ -286,12 +306,15 @@ const ProductEditModal: React.FC<ProductEditModalProps> = ({
             onChange={handleChange}
             onRemove={handleDeleteImage}
           >
-            <div>
-              <UploadOutlined />
-              <div>Upload</div>
-            </div>
+            {fileList.length < 8 && (
+              <div>
+                <UploadOutlined />
+                <div>Upload</div>
+              </div>
+            )}
           </Upload>
         </Form.Item>
+
         <Form.Item>
           <Button
             loading={

@@ -3,7 +3,11 @@ import { getToken } from "../../src/utils/token";
 import { jwtDecode } from "jwt-decode";
 import { devtools } from "zustand/middleware";
 
-export const useAppStore = create<any>()(
+export type AppStore = {
+  userData: any | null;
+  setUserData: (data: any) => void;
+};
+export const useAppStore = create<AppStore>()(
   devtools((set: any, get: any) => {
     const token = getToken();
     const initUserData = token ? jwtDecode(token) : undefined;

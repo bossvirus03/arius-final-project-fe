@@ -2,6 +2,7 @@ import { Button, Form, FormProps, Input, message } from "antd";
 import GoogleColorIcon from "../../../components/Icons/GoogleColorIcon";
 import useLogin, { LoginCredentials } from "../hooks/useLogin";
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { Link } from "react-router";
 
 function Login() {
   const { loginUser, isPending } = useLogin();
@@ -36,9 +37,9 @@ function Login() {
 
         {/* Right Section (Login Form) */}
         <div className="flex flex-col justify-center w-1/2 p-10">
-          <h1 className="mb-4 text-4xl font-bold text-gray-800">FASCO</h1>
+          <h1 className="mb-4 text-4xl font-bold text-gray-800">Furniro</h1>
           <h3 className="mb-6 text-xl font-semibold text-gray-600">
-            Sign In to FASCO
+            Sign In to Furniro
           </h3>
 
           {/* Social Login Buttons */}
@@ -101,6 +102,12 @@ function Login() {
                 {isPending ? "Signing In..." : "Sign In"}
               </Button>
             </Form.Item>
+            <p className="text-gray-600 ">
+              New to Furniro?
+              <Link className="text-blue-500" to={"/register"}>
+                Sign up now.
+              </Link>
+            </p>
           </Form>
         </div>
       </div>

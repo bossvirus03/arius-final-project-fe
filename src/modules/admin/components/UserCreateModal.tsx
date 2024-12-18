@@ -60,11 +60,19 @@ function UserCreateModal({
       onOk={handleOk}
       onCancel={handleCancel}
       confirmLoading={isPending}
+      maskClosable={false}
     >
       <Form form={form} layout="vertical">
         <Form.Item
-          label="Name"
-          name="name"
+          label="First Name"
+          name="firstName"
+          rules={[{ required: true, message: "Please enter the user's name" }]}
+        >
+          <Input placeholder="Enter name" />
+        </Form.Item>
+        <Form.Item
+          label="Last Name"
+          name="lastName"
           rules={[{ required: true, message: "Please enter the user's name" }]}
         >
           <Input placeholder="Enter name" />

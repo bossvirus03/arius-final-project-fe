@@ -42,7 +42,7 @@ export const onGetProducts = async ({
   }
 
   // Combine all filters with "and"
-  const filterQuery = filters.join(" and ");
+  const filterQuery = filters.join(" or ");
 
   const params: any = {
     page,

@@ -1,5 +1,12 @@
 import React from "react";
 import { createBrowserRouter, Outlet } from "react-router";
+import UserAccountLayout from "../modules/main/modules/profle/layouts/UserAccountLayout";
+import Address from "../modules/main/modules/profle/pages/Address";
+import Bank from "../modules/main/modules/profle/pages/Bank";
+import ChangePassword from "../modules/main/modules/profle/pages/ChangePassword";
+const Profile = React.lazy(
+  () => import("../modules/main/modules/profle/pages/Profile")
+);
 const AppContainer = React.lazy(() => import("../layouts/AppContainer"));
 const AuthContainer = React.lazy(() => import("../layouts/AuthContainer"));
 const Login = React.lazy(() => import("../modules/auth/pages/Login"));
@@ -62,6 +69,28 @@ export const browserRouters = createBrowserRouter([
             element: <Main />,
           },
           {
+            path: "/user/account/profile",
+            element: <UserAccountLayout />,
+            children: [
+              {
+                path: "",
+                element: <Profile />,
+              },
+              {
+                path: "address",
+                element: <Address />,
+              },
+              {
+                path: "bank",
+                element: <Bank />,
+              },
+              {
+                path: "change-password",
+                element: <ChangePassword />,
+              },
+            ],
+          },
+          {
             path: "shop",
             element: <Outlet />, // Wrapping Shop and children
             children: [
@@ -85,6 +114,7 @@ export const browserRouters = createBrowserRouter([
               },
             ],
           },
+
           {
             path: "about",
             element: <Outlet />,

@@ -9,3 +9,12 @@ export interface TokenInfo {
   exp: number;
   roles: string;
 }
+
+export interface RegisterCredentials {
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+  password: string;
+  dob: Date;
+}

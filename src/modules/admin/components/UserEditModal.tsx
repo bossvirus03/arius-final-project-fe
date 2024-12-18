@@ -64,11 +64,13 @@ function UserEditModal({
   return (
     <div>
       <Modal
+        width={900}
         title="Edit User"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
         confirmLoading={isPending} // Show loading state while updating
+        maskClosable={false}
       >
         <Form
           form={form}
@@ -118,6 +120,19 @@ function UserEditModal({
             >
               <Input disabled placeholder="Enter username" />
             </Form.Item>
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  type: "string",
+                  message: "Please enter a valid password",
+                },
+              ]}
+            >
+              <Input placeholder="Enter password" />
+            </Form.Item>
           </div>
           <div className="flex gap-5">
             <Form.Item
@@ -148,8 +163,45 @@ function UserEditModal({
             </Form.Item>
           </div>
           <Form.Item
-            label="Address"
-            name="address"
+            label="Country"
+            name="country"
+            rules={[
+              { type: "string", message: "Please enter a valid country" },
+            ]}
+          >
+            <Input placeholder="Enter address" />
+          </Form.Item>
+          <Form.Item
+            label="City"
+            name="city"
+            rules={[{ type: "string", message: "Please enter a valid city" }]}
+          >
+            <Input placeholder="Enter address" />
+          </Form.Item>
+          <Form.Item
+            label="Province"
+            name="province"
+            rules={[
+              { type: "string", message: "Please enter a valid province" },
+            ]}
+          >
+            <Input placeholder="Enter address" />
+          </Form.Item>
+          <Form.Item
+            label="StreetAddress"
+            name="streetAddress"
+            rules={[
+              {
+                type: "string",
+                message: "Please enter a valid street Address",
+              },
+            ]}
+          >
+            <Input placeholder="Enter address" />
+          </Form.Item>
+          <Form.Item
+            label="Address Detail"
+            name="addressDetail"
             rules={[
               { type: "string", message: "Please enter a valid address" },
             ]}

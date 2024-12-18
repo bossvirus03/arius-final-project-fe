@@ -26,7 +26,12 @@ function User() {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10); // Default page size
 
-  const { data, isLoading, refetch } = useQueryUsers(sortField, sortOrder);
+  const { data, isLoading, refetch } = useQueryUsers(
+    sortField,
+    sortOrder,
+    currentPage,
+    pageSize
+  );
   const { deleteUser } = useDeleteUser();
   const { importUsers, isImporting } = useImportUsers();
   const { exportUsers, isExporting } = useExportUsers();

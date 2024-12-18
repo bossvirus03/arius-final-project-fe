@@ -3,7 +3,7 @@ export const ApiUrls = {
   auth: {
     login: "/auth/login",
     logout: "/auth/logout",
-    register: " http://locahost:3050/api/register",
+    register: "/auth/register",
     refreshToken: "/auth/refresh",
   },
   admin: {
