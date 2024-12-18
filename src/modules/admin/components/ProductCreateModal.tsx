@@ -27,7 +27,6 @@ const ProductCreateModal: React.FC<ProductCreateModalProps> = ({
   setIsModalOpen,
   refetch,
 }) => {
-  console.log("rerender");
   const [form] = Form.useForm();
   const [thumbnail, setThumbnail] = useState<RcFile | null>(null);
   const [fileList, setFileList] = useState<any[]>([]);

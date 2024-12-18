@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Dropdown, Menu, MenuProps } from "antd";
+// import { Dropdown, Menu, MenuProps } from "antd";
 import { Link } from "react-router";
 import Logo from "./Icons/Logo";
 import AccountIcon from "./Icons/AccountIcon";
@@ -13,6 +13,11 @@ import PersonIcon from "./Icons/PersonIcon";
 import { getRefreshToken } from "../utils/token";
 import useLogout from "../hooks/useLogout";
 import SearchInput from "./SearchInput";
+import Dropdown from "./Dropdown";
+import OrderIcon from "./Icons/OrderIcon";
+import CicleHelpIcon from "./Icons/CicleHelpIcon";
+import PhoneIcon from "./Icons/PhoneIcon";
+import PhoneOutlineIcon from "./Icons/PhoneOutlineIcon";
 
 function Header() {
   const { data } = useQueryCartInfo();
@@ -37,51 +42,66 @@ function Header() {
 
   const handleClose = useCallback(() => setCartOverlayOpen(false), []);
 
-  const items: MenuProps["items"] = [
+  const items = [
     {
       label: (
         <Link
-          className="w-[150px] flex items-center justify-center gap-3 font-semibold after:w-100%"
-          to={"#"}
+          className="w-[150px] flex items-center gap-3 font-semibold after:w-100%"
+          to={"/profile"}
           style={{ width: "150px" }}
         >
           <PersonIcon />
           Profile
         </Link>
       ),
-      key: "0",
     },
     {
       label: (
         <Link
-          className="flex items-center justify-center gap-3 font-semibold"
-          to={"#"}
+          className="flex items-center gap-3 font-semibold"
+          to={"/cart"}
           style={{ width: "150px" }}
         >
           <CartIcon />
           Cart
         </Link>
       ),
-      key: "0",
-    },
-    {
-      label: <Link to={"#"}>2nd menu item</Link>,
-      key: "1",
-    },
-    {
-      type: "divider",
     },
     {
       label: (
-        <button
+        <Link className="flex items-center gap-3 font-semibold" to={"/order"}>
+          <OrderIcon />
+          Order
+        </Link>
+      ),
+    },
+    {
+      label: (
+        <Link className="flex items-center gap-3 font-semibold" to={"/about"}>
+          <CicleHelpIcon />
+          About
+        </Link>
+      ),
+    },
+    {
+      label: (
+        <Link className="flex items-center gap-3 font-semibold" to={"/contact"}>
+          <PhoneOutlineIcon />
+          Contact
+        </Link>
+      ),
+    },
+    { divider: true },
+    {
+      label: (
+        <div
           onClick={handleLogout}
-          className="flex items-center justify-center gap-3 font-semibold text-red-500"
+          className="flex items-center gap-3 font-semibold text-red-500 cursor-pointer"
         >
           <LogoutIcon />
           Logout
-        </button>
+        </div>
       ),
-      key: "3",
     },
   ];
 
@@ -149,9 +169,9 @@ function Header() {
             </button>
           </div>
           <Dropdown menu={{ items }} placement="bottom" trigger={["click"]}>
-            <a href="#account">
+            <button>
               <AccountIcon />
-            </a>
+            </button>
           </Dropdown>
         </div>
         <div className="lg:hidden">

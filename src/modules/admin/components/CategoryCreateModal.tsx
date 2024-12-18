@@ -12,7 +12,6 @@ function CategoryCreateModal({
   setIsModalOpen,
   refetch,
 }: CategoryCreateModalProps) {
-  console.log("rerender");
   const [form] = Form.useForm();
   const { createCategory } = useCreateCategory();
 

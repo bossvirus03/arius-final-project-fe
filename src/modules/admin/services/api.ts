@@ -10,7 +10,7 @@ import {
   OrderRecord,
   ProductsResponse,
   RoleRecord,
-  TagResponse,
+  TagRecord,
   UpdateCategoryRequest,
   UpdateProductRequest,
   UpdateRoleRequest,
@@ -168,12 +168,12 @@ export const onDeleteCategory = (categoy: string) => {
 };
 
 // TAGS
-export const onGetTags = async (): Promise<TagResponse[]> => {
+export const onGetTags = async (): Promise<TagRecord[]> => {
   const data = await api.get(ApiUrls.admin.tag.getAll);
   return data?.data.data;
 };
 export const onCreateTag = ({ body }: { body: CreateRoleRequest }) => {
-  return api.post<TagResponse>(`${ApiUrls.admin.tag.create}`, body);
+  return api.post<TagRecord>(`${ApiUrls.admin.tag.create}`, body);
 };
 
 export const onUpdateTag = ({

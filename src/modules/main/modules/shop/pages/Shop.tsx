@@ -6,31 +6,25 @@ import Pagination from "../../../../../components/Pagination";
 import ProductGridLoading from "../../../../admin/components/loading/ProductGridLoading";
 
 function Shop() {
-  const [sortField, setSortField] = useState<string>("");
-  const [sortOrder, setSortOrder] = useState<string>("");
   const [pageSize, setPageSize] = useState<number>(16);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [minPrice, setMinPrice] = useState<number | null>(null);
+  const [maxPrice, setMaxPrice] = useState<number | null>(null);
+  const [tags, setTags] = useState<string[]>([]);
+  const [categories, setCategories] = useState<string[]>([]);
 
-  const { data: products, isPending } = useQueryProducts(
-    sortField,
-    sortOrder,
-    currentPage,
-    pageSize
-  );
+  const { data: products, isPending } = useQueryProducts({
+    page: currentPage,
+    size: pageSize,
+    minPrice,
+    maxPrice,
+    categories: categories,
+    tags: tags,
+  });
 
   const total = products?.meta.total || 0;
   const startIndex = (currentPage - 1) * pageSize + 1;
   const endIndex = Math.min(currentPage * pageSize, total);
-
-  const handleSetSortField = useCallback((newSortField: string) => {
-    setSortField(newSortField);
-    setCurrentPage(1);
-  }, []);
-
-  const handleSetSortOrder = useCallback((newSortOrder: string) => {
-    setSortOrder(newSortOrder);
-    setCurrentPage(1);
-  }, []);
 
   const handleSetPageSize = useCallback((newPageSize: number) => {
     setPageSize(newPageSize);
@@ -40,17 +34,28 @@ function Shop() {
   const handleSetCurrentPage = useCallback((newPage: number) => {
     setCurrentPage(newPage);
   }, []);
+  const handleSetPriceRange = useCallback(
+    (min: number | null, max: number | null) => {
+      setMinPrice(min);
+      setMaxPrice(max);
+      setCurrentPage(1);
+    },
+    []
+  );
 
   return (
     <div className="container">
       <FilterBar
+        setPriceRange={handleSetPriceRange}
+        isShowCategory={true}
+        isShowTags={true}
         setPageSize={handleSetPageSize}
-        setSortField={handleSetSortField}
-        setSortOrder={handleSetSortOrder}
         startIndex={startIndex}
         endIndex={endIndex}
         total={total}
         pageSize={pageSize}
+        setCategories={setCategories}
+        setTags={setTags}
       />
       {isPending ? (
         <>

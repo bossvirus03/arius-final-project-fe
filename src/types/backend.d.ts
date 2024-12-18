@@ -70,7 +70,7 @@ export interface CategoryRecord {
   description?: string;
 }
 
-export interface TagResponse {
+export interface TagRecord {
   name: string;
   description?: string;
 }
@@ -155,9 +155,8 @@ export interface CheckoutItemProductResponse {
 }
 
 export interface SearchProductResponse {
-  data: ProductRecord[];
-  totalPages: number;
-  totalElements: number;
+  meta: MetaPagination;
+  result: ProductRecord[];
 }
 
 export interface GetOrdersResponse {

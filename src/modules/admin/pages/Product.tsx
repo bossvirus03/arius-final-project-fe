@@ -21,7 +21,7 @@ function Product() {
   const [sortOrder, setSortOrder] = useState<string>("desc");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10); // Default page size
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [actionProduct, setActionProduct] = useState<ProductRecord | null>(
     null

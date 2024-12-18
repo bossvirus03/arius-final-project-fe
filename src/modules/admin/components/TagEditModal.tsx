@@ -1,11 +1,11 @@
 import React from "react";
 import { Modal, Form, Input, Button, message } from "antd";
 import useUpdateTag from "../hooks/tag/useUpdateTag";
-import { TagResponse } from "../../../types/backend";
+import { TagRecord } from "../../../types/backend";
 
 interface TagEditModalProps {
-  actionTag: TagResponse | null;
-  setActionTag: (tag: TagResponse | null) => void;
+  actionTag: TagRecord | null;
+  setActionTag: (tag: TagRecord | null) => void;
   isModalOpen: boolean;
   setIsModalOpen: (isOpen: boolean) => void;
   refetch: () => void;

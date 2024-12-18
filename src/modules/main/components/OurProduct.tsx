@@ -24,9 +24,15 @@ function OurProduct() {
             <div className="flex justify-center">
               <button
                 onClick={() => navigate(`/search?query=${tag}`)}
-                className="flex items-center justify-center font-semibold border text-gold-500 border-gold-500 h-[48px] w-[245px]"
+                className="relative overflow-hidden font-semibold border text-gold-500 border-gold-500 h-[48px] w-[245px] group"
               >
-                Show More
+                {/* Chữ: Đảm bảo luôn ở trên */}
+                <span className="absolute top-0 left-0 z-10 flex items-center justify-center w-full h-full transition-all duration-500 text-gold-500 group-hover:text-white">
+                  Show More
+                </span>
+
+                {/* Nền trượt màu gold */}
+                <div className="absolute top-0 left-0 w-0 h-full transition-all duration-500 bg-gold-500 group-hover:w-full"></div>
               </button>
             </div>
           </div>

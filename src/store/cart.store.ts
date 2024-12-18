@@ -100,7 +100,6 @@ export const useCartStore = create<CartStore>()(
 
         // Return updated state
 
-        console.log("???????>>>", totalItem, updatedCart);
         return {
           cartItem: updatedCart, // Update cart items
           totalItem: updatedCart.length, // Total number of items

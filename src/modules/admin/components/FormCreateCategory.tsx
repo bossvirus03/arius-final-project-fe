@@ -2,7 +2,6 @@ import React from "react";
 import { Modal, Form, Input, Button, message } from "antd";
 
 function FormCreateCategory({ form, onSubmit }: any) {
-  console.log("rerender");
   return (
     <div>
       <Form form={form} layout="vertical" onFinish={onSubmit}>

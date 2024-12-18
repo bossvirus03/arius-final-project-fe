@@ -7,7 +7,7 @@ import {
   PlusOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
-import { TagResponse } from "../../../types/backend";
+import { TagRecord } from "../../../types/backend";
 import useQueryCategories from "../hooks/tag/useQueryTags";
 import TagCreateModal from "../components/TagCreateModal";
 import useDeleteTag from "../hooks/tag/useDeleteTag";
@@ -16,7 +16,7 @@ import TagEditModal from "../components/TagEditModal";
 function Tag() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [actionTag, setActionTag] = useState<TagResponse | null>(null);
+  const [actionTag, setActionTag] = useState<TagRecord | null>(null);
 
   const { data, isPending, refetch } = useQueryCategories();
   const { deleteTag } = useDeleteTag();
@@ -31,7 +31,7 @@ function Tag() {
     });
   };
 
-  const columns: TableProps<TagResponse>["columns"] = [
+  const columns: TableProps<TagRecord>["columns"] = [
     {
       title: "Name",
       dataIndex: "name",
@@ -85,7 +85,7 @@ function Tag() {
         />
       </div>
 
-      <Table<TagResponse>
+      <Table<TagRecord>
         columns={columns}
         dataSource={data || []}
         loading={isPending}

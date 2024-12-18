@@ -17,8 +17,11 @@ function SearchInput({
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchTerm, setSearchTerm] = useState("");
-  const { data, isPending } = useSearchProduct(searchTerm.trim() || "");
+  const { data, isPending } = useSearchProduct({
+    queryTerm: searchTerm.trim() || "",
+  });
 
+  console.log(">>>>>>>", searchTerm);
   // Debounce để giảm số lần gọi API
   const debouncedSearch = useCallback(
     debounce((query: string) => {
@@ -41,8 +44,6 @@ function SearchInput({
       debouncedSearch.cancel();
     };
   }, [debouncedSearch]);
-
-  console.log("rerender");
 
   return (
     <div className="relative">
@@ -104,8 +105,8 @@ function SearchInput({
           </div>
           {isPending ? (
             <div className="p-2 text-center">Loading...</div>
-          ) : data?.data?.length > 0 ? (
-            data.data.map((item: any) => (
+          ) : data?.result?.length > 0 ? (
+            data.result.map((item: any) => (
               <div
                 key={item.id}
                 className="p-2 cursor-pointer hover:bg-gray-100"
@@ -114,6 +115,7 @@ function SearchInput({
                 }}
               >
                 {item.name}
+                <p className="text-[12px] text-gray-400">{item.description}</p>
               </div>
             ))
           ) : (

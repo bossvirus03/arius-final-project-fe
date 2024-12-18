@@ -34,7 +34,6 @@ const ProductEditModal: React.FC<ProductEditModalProps> = ({
   setActionProduct,
   refetch,
 }) => {
-  console.log("rerender");
   const [form] = Form.useForm();
   const [thumbnail, setThumbnail] = useState<string | File | null>(null);
   const [fileList, setFileList] = useState<any[]>([]);

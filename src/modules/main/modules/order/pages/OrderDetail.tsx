@@ -8,7 +8,6 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const OrderDetail = () => {
   const { id } = useParams();
-  console.log("object", id);
   const { data: order, isLoading, isError, error } = useGetOrderDetail(id!);
 
   if (isLoading) {

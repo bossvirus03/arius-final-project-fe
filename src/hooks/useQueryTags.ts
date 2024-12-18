@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { onGetCategories } from "../../services/api";
+import { onGetTags } from "../services/api";
 
-const useQueryCategories = () => {
+const useQueryTags = () => {
   const { isPending, isError, data, error, refetch } = useQuery({
-    queryKey: ["admin-categories"],
-    queryFn: onGetCategories,
+    queryKey: ["tags"],
+    queryFn: onGetTags,
   });
   return {
     isPending,
@@ -15,4 +15,4 @@ const useQueryCategories = () => {
   };
 };
 
-export default useQueryCategories;
+export default useQueryTags;
